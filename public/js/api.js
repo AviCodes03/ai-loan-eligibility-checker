@@ -45,9 +45,13 @@ const apiClient = {
       const json = await response.json().catch(() => null);
 
       if (!response.ok) {
-        const errorMsg = (json && (json.error || json.message)) || `Server returned HTTP ${response.status}`;
+        const baseMsg = (json && (json.error || json.message)) || `Server returned HTTP ${response.status}`;
         const errorDetails = (json && json.details) || null;
-        const err = new Error(errorMsg);
+        let displayMsg = baseMsg;
+        if (errorDetails && Array.isArray(errorDetails) && errorDetails.length > 0) {
+          displayMsg = `${baseMsg} (${errorDetails.join(' ')})`;
+        }
+        const err = new Error(displayMsg);
         err.details = errorDetails;
         err.status = response.status;
         throw err;

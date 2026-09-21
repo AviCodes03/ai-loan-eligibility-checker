@@ -165,10 +165,84 @@ function validateCreditAnalysis(req, res, next) {
   next();
 }
 
+/**
+ * Validates AI tips request payload (Prepares for Phase 4)
+ */
+function validateAiTipsRequest(req, res, next) {
+  const { profileSummary } = req.body;
+  const errors = [];
+
+  if (!profileSummary || typeof profileSummary !== 'object') {
+    errors.push('profileSummary object must be provided in the request body.');
+  } else {
+    if (!isValidNumber(profileSummary.monthlyIncome)) {
+      errors.push('profileSummary.monthlyIncome must be a valid positive number.');
+    }
+    if (!isValidNumber(profileSummary.requestedLoanAmount)) {
+      errors.push('profileSummary.requestedLoanAmount must be a valid positive number.');
+    }
+    if (!isValidNumber(profileSummary.creditScore)) {
+      errors.push('profileSummary.creditScore must be a valid credit score.');
+    }
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid AI coaching request payload.',
+      details: errors
+    });
+  }
+
+  // Sanitize any text fields
+  if (profileSummary.status) profileSummary.status = sanitizeString(profileSummary.status);
+  if (profileSummary.riskTier) profileSummary.riskTier = sanitizeString(profileSummary.riskTier);
+
+  next();
+}
+
+/**
+ * Validates Google Sheets assessment submission payload (Prepares for Phase 5)
+ */
+function validateAssessmentSubmission(req, res, next) {
+  const { applicantName, applicantEmail, assessmentData } = req.body;
+  const errors = [];
+
+  if (!applicantName || typeof applicantName !== 'string' || applicantName.trim().length === 0) {
+    errors.push('Applicant name or demo alias is required.');
+  }
+
+  if (!assessmentData || typeof assessmentData !== 'object') {
+    errors.push('Assessment data object is required.');
+  }
+
+  if (applicantEmail && typeof applicantEmail === 'string' && applicantEmail.trim().length > 0) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(applicantEmail.trim())) {
+      errors.push('Applicant email format is invalid.');
+    }
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid assessment submission payload.',
+      details: errors
+    });
+  }
+
+  req.body.applicantName = sanitizeString(applicantName);
+  if (applicantEmail) req.body.applicantEmail = sanitizeString(applicantEmail);
+
+  next();
+}
+
 module.exports = {
   sanitizeString,
   isValidNumber,
   validateLoanCheck,
   validateEmiCalculation,
-  validateCreditAnalysis
+  validateCreditAnalysis,
+  validateAiTipsRequest,
+  validateAssessmentSubmission
 };

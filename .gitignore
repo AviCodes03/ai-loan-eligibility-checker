@@ -1,6 +1,5 @@
 # Node dependencies
 node_modules/
-package-lock.json
 
 # Environment variables & secrets (CRITICAL: NEVER COMMIT)
 .env
@@ -8,13 +7,28 @@ package-lock.json
 .env.*.local
 *.pem
 *.key
+credentials.json
+*.token
+*.cert
+secrets
+secrets/
 
 # Logs
 logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Temporary & generated build files
+dist/
+build/
+coverage/
+.cache/
+*.tmp
+*.temp
+*.bak
 
 # OS metadata
 .DS_Store

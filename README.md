@@ -196,32 +196,65 @@ http://localhost:3000
 
 ---
 
-## 🔑 Anthropic Claude API Setup
+## 🔑 Anthropic Claude API Setup & Integration
 
-1. Create an account at the [Anthropic Console](https://console.anthropic.com/).
-2. Navigate to **API Keys** and generate a new key.
-3. Paste the key into your `.env` file:
-   ```env
-   ANTHROPIC_API_KEY=sk-ant-...
+The application integrates the Anthropic Claude API (`@anthropic-ai/sdk`) to deliver contextual, personalized financial literacy coaching.
+
+### 1. Configuration & Obtaining an API Key
+1. Create or log in to your account at the [Anthropic Console](https://console.anthropic.com/).
+2. Navigate to **API Keys** and generate a new key (`sk-ant-...`).
+3. Copy `.env.example` to `.env` if you haven't already:
+   ```bash
+   cp .env.example .env
    ```
-4. Restart the server (`npm start`).
-5. **Offline Fallback Note**: If `ANTHROPIC_API_KEY` is omitted, the application automatically uses the built-in rule-based coaching engine, clearly labeled in the user interface as *"Demo Rule-Based Guidance (Offline Fallback)"*.
+4. Set the key in your `.env`:
+   ```env
+   ANTHROPIC_API_KEY=sk-ant-api03-...
+   ```
+5. Restart the application server (`npm start`).
+
+### 2. Claude's Strictly Limited Role & System Guardrails
+By strict design and prompt engineering, **Claude is an educational mentor only**:
+- **NO Calculation of Financial Numbers**: Claude does **not** calculate loan eligibility, does **not** compute eligibility scores, does **not** calculate EMI, and does **not** determine FOIR or DTI.
+- **NO Decision Authority**: Claude **cannot** approve or decline loans, alter credit scores, or override the deterministic financial calculation results.
+- **Role Boundary**: All numerical metrics are computed 100% deterministically by the backend financial engines first. These results are then supplied to Claude purely as contextual facts so that Claude can generate qualitative educational coaching (strengths, vulnerabilities, and actionable improvement steps).
+
+### 3. Automatic Deterministic Fallback Behavior
+The application is built for maximum presentation resilience. If:
+- `ANTHROPIC_API_KEY` is omitted or empty,
+- Claude API servers are unreachable or network is offline,
+- An API error (HTTP 4xx / 5xx) occurs,
+- Anthropic rate limits are reached (HTTP 429), or
+- The API call exceeds the 10-second timeout,
+
+the backend **automatically and seamlessly switches to the built-in deterministic rule-based advisory engine**.
+- The API response and UI clearly label the source:
+  - **Claude Active**: `source: "claude"`, Badge: `"✨ Powered by Anthropic Claude (claude-3-5-sonnet)"`
+  - **Fallback Active**: `source: "fallback"`, Badge: `"⚡ Demo Rule-Based Guidance (Offline Fallback)"`
+- This ensures the college demo can be presented anytime without dependency on external network access or paid API credits.
+
+### 4. Security & Secret Containment
+- **Backend Only**: The Anthropic API key is loaded into Node.js via `dotenv` and is strictly never transmitted to the browser, frontend JavaScript, or HTML.
+- **Redaction in Logs & Stack Traces**: The server's structured logger and centralized error handlers automatically scrub API keys matching `sk-ant-*` and replace them with `[REDACTED_API_KEY]`.
+- **Git Protection**: `.env` is permanently listed in `.gitignore` to prevent accidental credential commits.
 
 ---
 
 ## 📊 Google Sheets Integration Setup (Google Apps Script Webhook)
 
-The easiest, zero-credential way to log assessment records into Google Sheets:
+The application integrates with Google Sheets via a secure, zero-dependency **Google Apps Script Webhook**. No GCP service account JSON key downloads or complex IAM configurations are required.
 
 ### 1. Create a Google Sheet
-Create a new Google Sheet named **"AI Loan Assessments"** with the following header row in Row 1:
-`Timestamp | Applicant Name | Email | Monthly Income | Loan Requested | Tenure (Mos) | Interest Rate | Credit Score | EMI | Max Approved | Status | Risk Tier`
+Create a new Google Sheet named **"AI Loan Assessments"** and paste this exact header into Row 1:
+```
+Timestamp | Applicant Name | Email | Monthly Income (₹) | Loan Requested (₹) | Tenure (Mos) | Interest Rate (%) | Credit Score | Calculated EMI (₹) | Max Approved (₹) | Status | Risk Tier | Eligibility Score (/100)
+```
 
-### 2. Open Apps Script
-Click **Extensions** → **Apps Script** in the top menu of your Google Sheet.
+### 2. Open Apps Script Editor
+In the top menu of your Google Sheet, click **Extensions** → **Apps Script**.
 
-### 3. Paste the Webhook Script
-Replace all existing code with this snippet:
+### 3. Paste the Webhook Handler Code
+Replace all code in the editor (`Code.gs`) with this snippet:
 ```javascript
 function doPost(e) {
   try {
@@ -229,8 +262,8 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
     
     sheet.appendRow([
-      new Date().toISOString(),
-      data.applicantName || 'Anonymous',
+      data.timestamp || new Date().toISOString(),
+      data.applicantName || 'Anonymous Demo Applicant',
       data.applicantEmail || 'N/A',
       data.monthlyIncome || 0,
       data.requestedLoanAmount || 0,
@@ -240,10 +273,11 @@ function doPost(e) {
       data.calculatedEmi || 0,
       data.maxEligibleAmount || 0,
       data.status || 'N/A',
-      data.riskTier || 'N/A'
+      data.riskTier || 'N/A',
+      data.eligibilityScore || 0
     ]);
     
-    return ContentService.createTextOutput(JSON.stringify({ success: true, message: "Record saved" }))
+    return ContentService.createTextOutput(JSON.stringify({ success: true, message: "Assessment record saved successfully" }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.toString() }))
@@ -252,16 +286,24 @@ function doPost(e) {
 }
 ```
 
-### 4. Deploy as Web App
-1. Click **Deploy** → **New deployment**.
-2. Select type: **Web app**.
-3. Set **Execute as**: `Me`.
-4. Set **Who has access**: `Anyone`.
-5. Click **Deploy** and copy the **Web app URL**.
-6. Paste the URL into your `.env`:
-   ```env
-   GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/your_script_id/exec
-   ```
+### 4. Deploy as a Web App
+1. In the top right of the Apps Script editor, click **Deploy** → **New deployment**.
+2. Click the gear icon next to "Select type" and select **Web app**.
+3. Set **Description**: `Loan Assessment Logger`.
+4. Set **Execute as**: `Me (your-email@gmail.com)`.
+5. Set **Who has access**: `Anyone` *(crucial so the backend can POST records without OAuth tokens)*.
+6. Click **Deploy**, authorize permissions if prompted, and copy the **Web app URL** (`https://script.google.com/macros/s/.../exec`).
+
+### 5. Configure the Environment Variable
+Paste your Web app URL into your backend `.env` file:
+```env
+GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/your_deployment_id/exec
+```
+Restart the server (`npm start`).
+
+### 6. Offline / Unconfigured Handling & Security
+- **Confidentiality**: The `GOOGLE_SHEETS_WEBHOOK_URL` is kept **strictly on the backend**. It is never sent to the browser or returned in API responses.
+- **Graceful Offline Degradation**: If `GOOGLE_SHEETS_WEBHOOK_URL` is omitted, offline, or returns a network error, the backend catches the issue and records the submission in the local browser session without crashing.
 
 ---
 

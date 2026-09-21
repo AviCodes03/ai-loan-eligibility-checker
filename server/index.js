@@ -10,14 +10,15 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
+const getCorsOptions = require('./config/cors');
+const { requestLogger } = require('./middleware/logger');
+const { errorHandler, notFoundHandler, jsonSyntaxErrorHandler } = require('./middleware/errorHandler');
 const apiRoutes = require('./routes/apiRoutes');
-const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security Headers with Helmet
-// Allow inline styles/scripts for demo flexibility while securing defaults
+// 1. Security Headers via Helmet
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -34,30 +35,16 @@ app.use(
   })
 );
 
-// Cross-Origin Resource Sharing (CORS) Configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-  : ['http://localhost:3000'];
+// 2. Secure CORS Configuration
+app.use(cors(getCorsOptions()));
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, or same-origin static files)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
-        return callback(null, true);
-      }
-      return callback(null, true); // Permissive for educational local testing
-    },
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  })
-);
+// 3. Structured Safe Request Logging (secrets & PII strictly redacted)
+app.use(requestLogger);
 
-// Rate Limiting (Abuse prevention)
+// 4. Rate Limiting (Abuse prevention: 150 requests per 15 min window)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 150, // Limit each IP to 150 requests per window
+  windowMs: 15 * 60 * 1000,
+  max: 150,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -67,18 +54,19 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Request Parsing Middleware
+// 5. Body Parsing Middleware & JSON Syntax Error Interception
 app.use(express.json({ limit: '1mb' }));
+app.use(jsonSyntaxErrorHandler);
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-// Serve static frontend files from 'public' directory
+// 6. Serve static frontend assets from 'public' directory
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
-// Mount REST API routes
+// 7. Mount Unified REST API routes
 app.use('/api', apiRoutes);
 
-// Fallback for SPA routing - serve index.html for non-API routes
+// 8. Single-Page Application (SPA) Fallback Route
 app.get('*', (req, res, next) => {
   if (req.originalUrl.startsWith('/api')) {
     return next();
@@ -86,17 +74,17 @@ app.get('*', (req, res, next) => {
   return res.sendFile(path.join(publicDir, 'index.html'));
 });
 
-// Centralized 404 and Error Handling
+// 9. Centralized Error Handlers
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Start HTTP Server
+// 10. Start HTTP Server (when not running inside test runner)
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`🚀 AI Loan Eligibility Checker Server running on:`);
     console.log(`   http://localhost:${PORT}`);
-    console.log(`   Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`   AI Provider: ${process.env.ANTHROPIC_API_KEY ? 'Claude API (configured)' : 'Demo Fallback Engine'}`);
     console.log(`   Sheets Webhook: ${process.env.GOOGLE_SHEETS_WEBHOOK_URL ? 'Configured' : 'Offline / Unconfigured'}`);
     console.log(`====================================================`);

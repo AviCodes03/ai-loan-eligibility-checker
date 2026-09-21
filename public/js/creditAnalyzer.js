@@ -137,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ${data.recommendations.map((r) => `<li style="margin-bottom: 4px;">${r}</li>`).join('')}
           </ul>
         </div>
+
+        <div style="margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--color-border); font-size: 0.78rem; color: var(--color-text-muted);">
+          <em>${data.disclaimer}</em>
+        </div>
       </div>
     `;
 

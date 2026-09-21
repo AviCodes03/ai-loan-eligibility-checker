@@ -114,6 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="stat-grid">
           <div class="stat-card">
+            <div class="stat-label">Eligibility Score</div>
+            <div class="stat-value" style="color: var(--color-primary);">${data.eligibilityScore || 0}<span style="font-size: 0.8rem; color: var(--color-text-muted);">/100</span></div>
+          </div>
+          <div class="stat-card">
             <div class="stat-label">Max Eligible Amount</div>
             <div class="stat-value" style="color: var(--color-primary);">${window.APP_CONFIG.formatINR(data.maxEligibleAmount)}</div>
           </div>
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="stat-card">
             <div class="stat-label">Risk Profile</div>
-            <div class="stat-value" style="font-size: 1rem;">${data.riskTier}</div>
+            <div class="stat-value" style="font-size: 0.95rem;">${data.riskTier}</div>
           </div>
         </div>
 

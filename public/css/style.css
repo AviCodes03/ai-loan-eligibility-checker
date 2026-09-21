@@ -448,6 +448,8 @@ body {
 .table-responsive {
   max-height: 380px;
   overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   margin-top: 16px;
