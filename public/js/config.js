@@ -12,8 +12,14 @@ const CONFIG = {
   // Timeout for network requests (15 seconds)
   REQUEST_TIMEOUT_MS: 15000,
   
-  // Currency symbol
-  CURRENCY_SYMBOL: '$'
+  // Currency symbol (Indian Rupee)
+  CURRENCY_SYMBOL: '₹',
+
+  // Format monetary value using Indian numbering system (e.g. ₹1,00,000)
+  formatINR(val) {
+    if (val === null || val === undefined || isNaN(val)) return '₹0';
+    return '₹' + Math.round(Number(val)).toLocaleString('en-IN');
+  }
 };
 
 window.APP_CONFIG = CONFIG;

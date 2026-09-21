@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <span style="color: ${a.isEligible ? 'var(--color-success)' : 'var(--color-danger)'};">${a.status}</span>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.84rem;">
-          <div><strong>Monthly Income:</strong> $${a.input.monthlyIncome.toLocaleString()}</div>
-          <div><strong>Requested Loan:</strong> $${a.input.requestedLoanAmount.toLocaleString()}</div>
+          <div><strong>Monthly Income:</strong> ${window.APP_CONFIG.formatINR(a.input.monthlyIncome)}</div>
+          <div><strong>Requested Loan:</strong> ${window.APP_CONFIG.formatINR(a.input.requestedLoanAmount)}</div>
           <div><strong>Credit Score:</strong> ${a.input.creditScore}</div>
-          <div><strong>Estimated EMI:</strong> $${Math.round(a.calculatedEmi).toLocaleString()}/mo</div>
+          <div><strong>Estimated EMI:</strong> ${window.APP_CONFIG.formatINR(a.calculatedEmi)}/mo</div>
         </div>
       </div>
     `;
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #fff; border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem;';
     row.innerHTML = `
       <div>
-        <strong>${name}</strong> — $${assessment.input.requestedLoanAmount.toLocaleString()} requested
+        <strong>${name}</strong> — ${window.APP_CONFIG.formatINR(assessment.input.requestedLoanAmount)} requested
         <div style="font-size: 0.75rem; color: var(--color-text-muted);">${new Date().toLocaleTimeString()} • ${note}</div>
       </div>
       <span style="font-weight: 700; color: ${assessment.isEligible ? 'var(--color-success)' : 'var(--color-danger)'};">

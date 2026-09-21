@@ -73,26 +73,26 @@
           <form id="loan-check-form">
             <div class="form-group">
               <label class="form-label" for="monthly-income">
-                <span>Net Monthly Income ($)</span>
+                <span>Net Monthly Income (₹)</span>
               </label>
-              <input type="number" id="monthly-income" class="form-control" placeholder="e.g. 5000" min="1" step="100" value="5000" required>
+              <input type="number" id="monthly-income" class="form-control" placeholder="e.g. 50000" min="1" step="1000" value="50000" required>
             </div>
 
             <div class="form-group">
               <label class="form-label" for="existing-emi">
-                <span>Existing Monthly Debt EMIs ($)</span>
+                <span>Existing Monthly Debt EMIs (₹)</span>
               </label>
-              <input type="number" id="existing-emi" class="form-control" placeholder="e.g. 500" min="0" step="50" value="500">
+              <input type="number" id="existing-emi" class="form-control" placeholder="e.g. 10000" min="0" step="500" value="10000">
             </div>
 
             <div class="form-group">
               <div class="form-label">
                 <label for="loan-amount-input">Requested Loan Amount</label>
-                <span id="display-loan-amount" class="val-display">$100,000</span>
+                <span id="display-loan-amount" class="val-display">₹10,00,000</span>
               </div>
               <div class="slider-container">
-                <input type="range" id="loan-amount-slider" class="form-range" min="5000" max="1000000" step="5000" value="100000" aria-label="Requested Loan Amount Slider">
-                <input type="number" id="loan-amount-input" class="form-control" min="5000" max="1000000" step="5000" value="100000">
+                <input type="range" id="loan-amount-slider" class="form-range" min="50000" max="10000000" step="25000" value="1000000" aria-label="Requested Loan Amount Slider">
+                <input type="number" id="loan-amount-input" class="form-control" min="50000" max="10000000" step="25000" value="1000000">
               </div>
             </div>
 
@@ -147,16 +147,16 @@
           </div>
 
           <div class="card" style="margin-top: 0;">
-            <h2 class="card-title">How Eligibility Is Calculated</h2>
+            <h2 class="card-title">How Eligibility Is Calculated (Educational Demo)</h2>
             <div style="font-size: 0.88rem; color: var(--color-text-muted); line-height: 1.6;">
               <p style="margin-bottom: 8px;">
-                <strong>1. Fixed Obligation to Income Ratio (FOIR):</strong> Measures the percentage of your monthly income committed to paying debt. Traditional banks mandate that total debt installments remain under 40%–50% of income.
+                <strong>1. Fixed Obligation to Income Ratio (FOIR):</strong> Evaluates the portion of monthly income dedicated to servicing existing and requested EMIs. <em>(Note: The 40%–60% FOIR thresholds used in this project are example/demo criteria; in practice, DTI and FOIR requirements are configurable and vary across different lenders.)</em>
               </p>
               <p style="margin-bottom: 8px;">
-                <strong>2. Credit Tier Gating:</strong> Applicants with credit scores &ge; 750 receive standard prime eligibility. Scores below 650 are flagged for conditional requirements or co-applicants.
+                <strong>2. Credit Tier Gating:</strong> In this application's demonstration model, credit scores &ge; 750 represent prime eligibility benchmarks. Scores below 650 are flagged for conditional requirements or co-applicants. Example/demo threshold used by this application; lender requirements may vary.
               </p>
               <p>
-                <strong>3. Mathematical Certainty:</strong> Approval determinations are calculated 100% by deterministic code algorithms. AI is strictly reserved for qualitative financial coaching.
+                <strong>3. Mathematical Determinism:</strong> Eligibility determinations, FOIR limits, and maximum loan amounts are calculated 100% by deterministic code algorithms. Claude AI is strictly reserved for qualitative financial coaching.
               </p>
             </div>
           </div>
@@ -235,7 +235,10 @@
         <div>
           <div id="credit-result-container">
             <div class="card">
-              <h2 class="card-title">Credit Tier Standards</h2>
+              <h2 class="card-title">Credit Tier Standards (Demo Model)</h2>
+              <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 12px;">
+                Example/demo benchmarks used by this application. Actual risk tiers and interest rates vary by lender.
+              </p>
               <ul style="font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 10px;">
                 <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
                   <span><strong>750 – 900:</strong> Excellent</span>
@@ -281,11 +284,11 @@
           <div class="form-group">
             <div class="form-label">
               <label for="emi-amount-input">Principal Loan Amount</label>
-              <span id="display-emi-amount" class="val-display">$50,000</span>
+              <span id="display-emi-amount" class="val-display">₹5,00,000</span>
             </div>
             <div class="slider-container">
-              <input type="range" id="emi-amount-slider" class="form-range" min="1000" max="500000" step="1000" value="50000" aria-label="Principal Loan Amount Slider">
-              <input type="number" id="emi-amount-input" class="form-control" min="1000" max="500000" step="1000" value="50000">
+              <input type="range" id="emi-amount-slider" class="form-range" min="10000" max="10000000" step="10000" value="500000" aria-label="Principal Loan Amount Slider">
+              <input type="number" id="emi-amount-input" class="form-control" min="10000" max="10000000" step="10000" value="500000">
             </div>
           </div>
 
@@ -318,17 +321,17 @@
 
           <div style="text-align: center; padding: 16px 0;">
             <div style="font-size: 0.82rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Monthly EMI Payable</div>
-            <div id="emi-monthly-val" style="font-size: 2.4rem; font-weight: 800; color: var(--color-primary);">$1,590</div>
+            <div id="emi-monthly-val" style="font-size: 2.4rem; font-weight: 800; color: var(--color-primary);">₹15,900</div>
           </div>
 
           <div class="stat-grid">
             <div class="stat-card">
               <div class="stat-label">Total Interest</div>
-              <div id="emi-total-interest" class="stat-value" style="color: var(--color-warning);">$7,239</div>
+              <div id="emi-total-interest" class="stat-value" style="color: var(--color-warning);">₹72,395</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Total Payment</div>
-              <div id="emi-total-payment" class="stat-value">$57,239</div>
+              <div id="emi-total-payment" class="stat-value">₹5,72,395</div>
             </div>
           </div>
 

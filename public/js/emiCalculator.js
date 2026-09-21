@@ -79,15 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const tenureMonths = parseInt(tenureInput.value, 10) || 1;
 
     // Update labels
-    document.getElementById('display-emi-amount').textContent = `$${principal.toLocaleString()}`;
+    document.getElementById('display-emi-amount').textContent = window.APP_CONFIG.formatINR(principal);
     document.getElementById('display-emi-rate').textContent = `${rate.toFixed(1)}%`;
     document.getElementById('display-emi-tenure').textContent = `${tenureMonths} mos (${(tenureMonths / 12).toFixed(1)} yrs)`;
 
     const res = calculateEmi(principal, rate, tenureMonths);
 
-    if (monthlyEmiDisplay) monthlyEmiDisplay.textContent = `$${Math.round(res.monthlyEmi).toLocaleString()}`;
-    if (totalInterestDisplay) totalInterestDisplay.textContent = `$${Math.round(res.totalInterest).toLocaleString()}`;
-    if (totalPaymentDisplay) totalPaymentDisplay.textContent = `$${Math.round(res.totalPayment).toLocaleString()}`;
+    if (monthlyEmiDisplay) monthlyEmiDisplay.textContent = window.APP_CONFIG.formatINR(res.monthlyEmi);
+    if (totalInterestDisplay) totalInterestDisplay.textContent = window.APP_CONFIG.formatINR(res.totalInterest);
+    if (totalPaymentDisplay) totalPaymentDisplay.textContent = window.APP_CONFIG.formatINR(res.totalPayment);
 
     if (principalBar) principalBar.style.width = `${res.principalShare.toFixed(1)}%`;
     if (interestBar) interestBar.style.width = `${res.interestShare.toFixed(1)}%`;
@@ -113,11 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         tr.innerHTML = `
           <td>Month ${row.month}</td>
-          <td>$${Math.round(row.openingBalance).toLocaleString()}</td>
-          <td>$${Math.round(row.emi).toLocaleString()}</td>
-          <td style="color: var(--color-success);">$${Math.round(row.principalPortion).toLocaleString()}</td>
-          <td style="color: var(--color-warning);">$${Math.round(row.interestPortion).toLocaleString()}</td>
-          <td>$${Math.round(row.closingBalance).toLocaleString()}</td>
+          <td>${window.APP_CONFIG.formatINR(row.openingBalance)}</td>
+          <td>${window.APP_CONFIG.formatINR(row.emi)}</td>
+          <td style="color: var(--color-success);">${window.APP_CONFIG.formatINR(row.principalPortion)}</td>
+          <td style="color: var(--color-warning);">${window.APP_CONFIG.formatINR(row.interestPortion)}</td>
+          <td>${window.APP_CONFIG.formatINR(row.closingBalance)}</td>
         `;
       }
       tableBody.appendChild(tr);

@@ -52,7 +52,7 @@ function validateLoanCheck(req, res, next) {
   if (!isValidNumber(requestedLoanAmount)) {
     errors.push('Requested loan amount must be a positive number.');
   } else if (requestedLoanAmount < VALIDATION_BOUNDS.MIN_LOAN_AMOUNT || requestedLoanAmount > VALIDATION_BOUNDS.MAX_LOAN_AMOUNT) {
-    errors.push(`Loan amount must be between $${VALIDATION_BOUNDS.MIN_LOAN_AMOUNT.toLocaleString()} and $${VALIDATION_BOUNDS.MAX_LOAN_AMOUNT.toLocaleString()}.`);
+    errors.push(`Loan amount must be between ₹${VALIDATION_BOUNDS.MIN_LOAN_AMOUNT.toLocaleString('en-IN')} and ₹${VALIDATION_BOUNDS.MAX_LOAN_AMOUNT.toLocaleString('en-IN')}.`);
   }
 
   if (!isValidNumber(tenureMonths)) {

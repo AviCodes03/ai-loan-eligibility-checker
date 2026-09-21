@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slider.value = val;
       input.value = val;
       if (display) {
-        display.textContent = `${prefix}${Number(val).toLocaleString()}${suffix}`;
+        display.textContent = `${prefix}${Number(val).toLocaleString('en-IN')}${suffix}`;
       }
     };
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     update(input.value);
   }
 
-  syncInputs(amountSlider, amountInput, 'display-loan-amount', '$');
+  syncInputs(amountSlider, amountInput, 'display-loan-amount', '₹');
   syncInputs(tenureSlider, tenureInput, 'display-loan-tenure', '', ' mos');
   syncInputs(rateSlider, rateInput, 'display-loan-rate', '', '%');
 
@@ -115,11 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="stat-grid">
           <div class="stat-card">
             <div class="stat-label">Max Eligible Amount</div>
-            <div class="stat-value" style="color: var(--color-primary);">$${Math.round(data.maxEligibleAmount).toLocaleString()}</div>
+            <div class="stat-value" style="color: var(--color-primary);">${window.APP_CONFIG.formatINR(data.maxEligibleAmount)}</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Estimated Monthly EMI</div>
-            <div class="stat-value">$${Math.round(data.calculatedEmi).toLocaleString()}</div>
+            <div class="stat-value">${window.APP_CONFIG.formatINR(data.calculatedEmi)}</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Calculated FOIR</div>

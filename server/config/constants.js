@@ -1,26 +1,28 @@
 /**
  * Financial & Application Constants
- * Standard industry heuristic thresholds for educational demonstration.
+ * Example/demo thresholds used by this educational application.
+ * Note: In practical finance, FOIR, DTI, and eligibility criteria are configurable
+ * and vary across different lenders, credit policies, and loan products.
  */
 
 module.exports = {
-  // Fixed Obligation to Income Ratio (FOIR) limits based on monthly income tiers
+  // Configurable demo Fixed Obligation to Income Ratio (FOIR) limits based on monthly income tiers (in INR ₹)
   FOIR_LIMITS: {
-    LOW_INCOME_MAX: 3000,       // Up to 3,000 monthly income
-    LOW_INCOME_FOIR: 0.40,      // Max 40% FOIR
-    MID_INCOME_MAX: 7500,       // 3,001 to 7,500 monthly income
-    MID_INCOME_FOIR: 0.50,      // Max 50% FOIR
-    HIGH_INCOME_FOIR: 0.60      // Above 7,500 monthly income -> Max 60% FOIR
+    LOW_INCOME_MAX: 30000,      // Up to ₹30,000 monthly income (demo benchmark)
+    LOW_INCOME_FOIR: 0.40,      // Example demo threshold: Max 40% FOIR
+    MID_INCOME_MAX: 75000,      // ₹30,001 to ₹75,000 monthly income
+    MID_INCOME_FOIR: 0.50,      // Example demo threshold: Max 50% FOIR
+    HIGH_INCOME_FOIR: 0.60      // Above ₹75,000 monthly income -> Example demo threshold: Max 60% FOIR
   },
 
-  // Debt-to-Income (DTI) Thresholds
+  // Example Debt-to-Income (DTI) Thresholds for educational demonstration
   DTI_THRESHOLDS: {
-    HEALTHY: 36,   // Below 36% is standard healthy DTI
-    MODERATE: 45,  // 36% - 45% requires review
-    HIGH_RISK: 50  // Above 50% represents over-leverage
+    HEALTHY: 36,   // Demo threshold: below 36%
+    MODERATE: 45,  // Demo threshold: 36% - 45%
+    HIGH_RISK: 50  // Demo threshold: above 50%
   },
 
-  // Credit Score Tiers (Standard 300 - 900 scale)
+  // Example Credit Score Tiers (Standard 300 - 900 scale)
   CREDIT_SCORE_TIERS: {
     EXCELLENT: { min: 750, max: 900, label: 'Excellent', riskLevel: 'Low', ltvCapPct: 100 },
     GOOD: { min: 700, max: 749, label: 'Good', riskLevel: 'Low-Moderate', ltvCapPct: 90 },
@@ -29,14 +31,14 @@ module.exports = {
     CRITICAL: { min: 300, max: 549, label: 'Critical / High Risk', riskLevel: 'Very High', ltvCapPct: 0 }
   },
 
-  // Input Validation Bounds
+  // Input Validation Bounds (in INR ₹)
   VALIDATION_BOUNDS: {
     MIN_CREDIT_SCORE: 300,
     MAX_CREDIT_SCORE: 900,
     MIN_TENURE_MONTHS: 1,
     MAX_TENURE_MONTHS: 360,
-    MIN_LOAN_AMOUNT: 100,
-    MAX_LOAN_AMOUNT: 10000000,
+    MIN_LOAN_AMOUNT: 10000,       // Min ₹10,000
+    MAX_LOAN_AMOUNT: 100000000,   // Max ₹10 Crore (₹100,000,000)
     MIN_INTEREST_RATE: 0.1,
     MAX_INTEREST_RATE: 50.0
   }
