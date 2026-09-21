@@ -1,0 +1,32 @@
+{
+  "name": "ai-loan-eligibility-checker",
+  "version": "1.0.0",
+  "description": "An educational financial assessment web application featuring deterministic loan eligibility, credit score analysis, EMI calculation, AI coaching, and Google Sheets logging.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "loan-eligibility",
+    "credit-analyzer",
+    "emi-calculator",
+    "claude-api",
+    "financial-literacy",
+    "college-project"
+  ],
+  "author": "AI Loan Eligibility Checker Team",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0"
+  }
+}

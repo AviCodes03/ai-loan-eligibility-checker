@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Loan Eligibility Checker - Educational financial evaluation platform featuring deterministic eligibility rules, credit analyzer, EMI calculator, and Claude AI coaching.">
+  <title>AI Loan Eligibility Checker | Academic Financial Demo</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+</head>
+<body>
+
+  <!-- Top Educational Disclaimer Banner -->
+  <aside class="disclaimer-banner" role="alert" aria-label="Academic project disclaimer">
+    <span class="badge">Academic Demo</span>
+    <span>This application is an educational prototype and does <strong>not</strong> issue actual banking decisions or certified financial advice.</span>
+  </aside>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">🏦</div>
+        <div>
+          <div class="brand-title">AI Loan Eligibility Checker</div>
+          <div class="brand-subtitle">Smart Academic Financial Evaluation System</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Module Navigation">
+        <button class="tab-btn active" data-tab="tab-loan-checker">
+          <span>📋</span> Eligibility Checker
+        </button>
+        <button class="tab-btn" data-tab="tab-credit-analyzer">
+          <span>🎯</span> Credit Analyzer
+        </button>
+        <button class="tab-btn" data-tab="tab-emi-calc">
+          <span>🧮</span> EMI Calculator
+        </button>
+        <button class="tab-btn" data-tab="tab-ai-tips">
+          <span>✨</span> AI Financial Coach
+        </button>
+        <button class="tab-btn" data-tab="tab-sheets">
+          <span>📊</span> Sheets Sync
+        </button>
+      </nav>
+
+      <div id="system-status-badge" style="font-size: 0.78rem; font-weight: 700; color: var(--color-text-muted);">
+        ● Checking status...
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Body -->
+  <main class="main-content">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: LOAN ELIGIBILITY CHECKER -->
+    <!-- ========================================================================= -->
+    <section id="tab-loan-checker" class="tab-panel active" aria-labelledby="tab-loan-heading">
+      <div class="page-intro">
+        <h1 id="tab-loan-heading">Loan Eligibility Assessment</h1>
+        <p>Input your income, existing obligations, and desired loan parameters. Our deterministic financial engine evaluates your Debt-to-Income (DTI) and Fixed Obligation to Income Ratio (FOIR).</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Input Form Card -->
+        <div class="card">
+          <h2 class="card-title">Applicant Financial Profile</h2>
+          <form id="loan-check-form">
+            <div class="form-group">
+              <label class="form-label" for="monthly-income">
+                <span>Net Monthly Income ($)</span>
+              </label>
+              <input type="number" id="monthly-income" class="form-control" placeholder="e.g. 5000" min="1" step="100" value="5000" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="existing-emi">
+                <span>Existing Monthly Debt EMIs ($)</span>
+              </label>
+              <input type="number" id="existing-emi" class="form-control" placeholder="e.g. 500" min="0" step="50" value="500">
+            </div>
+
+            <div class="form-group">
+              <div class="form-label">
+                <label for="loan-amount-input">Requested Loan Amount</label>
+                <span id="display-loan-amount" class="val-display">$100,000</span>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="loan-amount-slider" class="form-range" min="5000" max="1000000" step="5000" value="100000" aria-label="Requested Loan Amount Slider">
+                <input type="number" id="loan-amount-input" class="form-control" min="5000" max="1000000" step="5000" value="100000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-label">
+                <label for="loan-tenure-input">Loan Tenure (Months)</label>
+                <span id="display-loan-tenure" class="val-display">60 mos</span>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="loan-tenure-slider" class="form-range" min="6" max="360" step="6" value="60" aria-label="Loan Tenure Slider">
+                <input type="number" id="loan-tenure-input" class="form-control" min="6" max="360" step="6" value="60">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-label">
+                <label for="loan-rate-input">Expected Interest Rate (% APR)</label>
+                <span id="display-loan-rate" class="val-display">8.5%</span>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="loan-rate-slider" class="form-range" min="1" max="25" step="0.1" value="8.5" aria-label="Interest Rate Slider">
+                <input type="number" id="loan-rate-input" class="form-control" min="1" max="25" step="0.1" value="8.5">
+              </div>
+            </div>
+
+            <div class="grid-2col" style="gap: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="loan-credit-score">Credit Score (300-900)</label>
+                <input type="number" id="loan-credit-score" class="form-control" min="300" max="900" value="740" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="employment-type">Employment Status</label>
+                <select id="employment-type" class="form-control">
+                  <option value="Salaried">Salaried Employee</option>
+                  <option value="Self-Employed">Self-Employed / Business</option>
+                  <option value="Student">Student / Academic</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">
+              Assess Loan Eligibility
+            </button>
+          </form>
+        </div>
+
+        <!-- Result Card / Placeholder -->
+        <div>
+          <div id="loan-result-container" style="display: none;">
+            <!-- Rendered dynamically by loanChecker.js -->
+          </div>
+
+          <div class="card" style="margin-top: 0;">
+            <h2 class="card-title">How Eligibility Is Calculated</h2>
+            <div style="font-size: 0.88rem; color: var(--color-text-muted); line-height: 1.6;">
+              <p style="margin-bottom: 8px;">
+                <strong>1. Fixed Obligation to Income Ratio (FOIR):</strong> Measures the percentage of your monthly income committed to paying debt. Traditional banks mandate that total debt installments remain under 40%–50% of income.
+              </p>
+              <p style="margin-bottom: 8px;">
+                <strong>2. Credit Tier Gating:</strong> Applicants with credit scores &ge; 750 receive standard prime eligibility. Scores below 650 are flagged for conditional requirements or co-applicants.
+              </p>
+              <p>
+                <strong>3. Mathematical Certainty:</strong> Approval determinations are calculated 100% by deterministic code algorithms. AI is strictly reserved for qualitative financial coaching.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: CREDIT SCORE ANALYZER -->
+    <!-- ========================================================================= -->
+    <section id="tab-credit-analyzer" class="tab-panel" aria-labelledby="tab-credit-heading">
+      <div class="page-intro">
+        <h1 id="tab-credit-heading">Credit Score Health Analyzer</h1>
+        <p>Explore how credit bureaus weigh payment consistency, utilization, account age, and inquiries to establish risk tiers.</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Interactive Credit Gauge Card -->
+        <div class="card">
+          <h2 class="card-title">Credit Gauge Simulator</h2>
+          <div class="gauge-wrapper">
+            <div class="credit-meter">
+              <div class="credit-meter-bg"></div>
+              <div class="credit-meter-mask"></div>
+              <div id="gauge-needle" style="width: 2px; height: 90px; background: #0f172a; position: absolute; bottom: 0; left: 99px; transform-origin: bottom center; transform: rotate(0deg); transition: transform 0.4s ease;"></div>
+            </div>
+            <div id="gauge-score" class="gauge-score-text">720</div>
+            <div id="gauge-tier" class="gauge-tier-badge">Good (Low-Moderate Risk)</div>
+          </div>
+
+          <form id="credit-analyzer-form" style="margin-top: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="credit-score-slider">
+                <span>Credit Score (300 – 900)</span>
+              </label>
+              <div class="slider-container">
+                <input type="range" id="credit-score-slider" class="form-range" min="300" max="900" step="5" value="720">
+                <input type="number" id="credit-score-input" class="form-control" min="300" max="900" value="720">
+              </div>
+            </div>
+
+            <div class="grid-2col" style="gap: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="ontime-payment">On-Time Payments (%)</label>
+                <input type="number" id="ontime-payment" class="form-control" min="0" max="100" value="98">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="credit-utilization">Credit Utilization (%)</label>
+                <input type="number" id="credit-utilization" class="form-control" min="0" max="100" value="28">
+              </div>
+            </div>
+
+            <div class="grid-2col" style="gap: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="history-length">Account History (Months)</label>
+                <input type="number" id="history-length" class="form-control" min="1" max="480" value="36">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="active-accounts">Active Credit Accounts</label>
+                <input type="number" id="active-accounts" class="form-control" min="0" max="50" value="3">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="recent-inquiries">Hard Inquiries (Last 6 Mos)</label>
+              <input type="number" id="recent-inquiries" class="form-control" min="0" max="20" value="1">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              Analyze Credit Factors
+            </button>
+          </form>
+        </div>
+
+        <!-- Credit Factor Analysis Output -->
+        <div>
+          <div id="credit-result-container">
+            <div class="card">
+              <h2 class="card-title">Credit Tier Standards</h2>
+              <ul style="font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                  <span><strong>750 – 900:</strong> Excellent</span>
+                  <span style="color: var(--color-success); font-weight: 700;">Prime Rates</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                  <span><strong>700 – 749:</strong> Good</span>
+                  <span style="color: var(--color-accent); font-weight: 700;">Standard Approval</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                  <span><strong>650 – 699:</strong> Fair</span>
+                  <span style="color: var(--color-warning); font-weight: 700;">Conditional</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                  <span><strong>550 – 649:</strong> Poor</span>
+                  <span style="color: #f97316; font-weight: 700;">Collateral Required</span>
+                </li>
+                <li style="display: flex; justify-content: space-between;">
+                  <span><strong>300 – 549:</strong> Critical</span>
+                  <span style="color: var(--color-danger); font-weight: 700;">High Default Risk</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: EMI CALCULATOR -->
+    <!-- ========================================================================= -->
+    <section id="tab-emi-calc" class="tab-panel" aria-labelledby="tab-emi-heading">
+      <div class="page-intro">
+        <h1 id="tab-emi-heading">Interactive EMI & Amortization Calculator</h1>
+        <p>Simulate Equated Monthly Installments (EMI) using the banking reducing-balance method, with full principal vs interest breakdown.</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Input Sliders Card -->
+        <div class="card">
+          <h2 class="card-title">Loan Parameters</h2>
+
+          <div class="form-group">
+            <div class="form-label">
+              <label for="emi-amount-input">Principal Loan Amount</label>
+              <span id="display-emi-amount" class="val-display">$50,000</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="emi-amount-slider" class="form-range" min="1000" max="500000" step="1000" value="50000" aria-label="Principal Loan Amount Slider">
+              <input type="number" id="emi-amount-input" class="form-control" min="1000" max="500000" step="1000" value="50000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <label for="emi-rate-input">Annual Interest Rate (% p.a.)</label>
+              <span id="display-emi-rate" class="val-display">9.0%</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="emi-rate-slider" class="form-range" min="0.1" max="25" step="0.1" value="9.0" aria-label="Annual Interest Rate Slider">
+              <input type="number" id="emi-rate-input" class="form-control" min="0.1" max="25" step="0.1" value="9.0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <label for="emi-tenure-input">Tenure (Months)</label>
+              <span id="display-emi-tenure" class="val-display">36 mos (3.0 yrs)</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="emi-tenure-slider" class="form-range" min="6" max="360" step="6" value="36" aria-label="Tenure Slider">
+              <input type="number" id="emi-tenure-input" class="form-control" min="6" max="360" step="6" value="36">
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary & Proportion Bar -->
+        <div class="card">
+          <h2 class="card-title">Payment Summary</h2>
+
+          <div style="text-align: center; padding: 16px 0;">
+            <div style="font-size: 0.82rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Monthly EMI Payable</div>
+            <div id="emi-monthly-val" style="font-size: 2.4rem; font-weight: 800; color: var(--color-primary);">$1,590</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Interest</div>
+              <div id="emi-total-interest" class="stat-value" style="color: var(--color-warning);">$7,239</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Payment</div>
+              <div id="emi-total-payment" class="stat-value">$57,239</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px;">
+              <span>Principal: <span id="emi-pct-principal">87.4%</span></span>
+              <span>Interest: <span id="emi-pct-interest">12.6%</span></span>
+            </div>
+            <div style="display: flex; height: 12px; border-radius: 9999px; overflow: hidden;">
+              <div id="emi-bar-principal" style="width: 87.4%; background: var(--color-primary);"></div>
+              <div id="emi-bar-interest" style="width: 12.6%; background: var(--color-warning);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amortization Schedule Table -->
+      <div class="card" style="margin-top: 24px;">
+        <h2 class="card-title">Amortization Schedule (Reducing Balance)</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Opening Balance</th>
+                <th>Monthly EMI</th>
+                <th>Principal Paid</th>
+                <th>Interest Paid</th>
+                <th>Closing Balance</th>
+              </tr>
+            </thead>
+            <tbody id="amortization-table-body">
+              <!-- Rendered dynamically by emiCalculator.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: AI FINANCIAL COACH (CLAUDE API) -->
+    <!-- ========================================================================= -->
+    <section id="tab-ai-tips" class="tab-panel" aria-labelledby="tab-ai-heading">
+      <div class="page-intro">
+        <h1 id="tab-ai-heading">AI Financial Coaching</h1>
+        <p>Receive constructive insights powered by the Anthropic Claude API, designed to help improve your creditworthiness and manage debt leverage.</p>
+      </div>
+
+      <div class="card" style="text-align: center; padding: 32px 24px;">
+        <div style="font-size: 2.5rem; margin-bottom: 12px;">🧠</div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Personalized Educational Analysis</h2>
+        <p style="max-width: 600px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--color-text-muted);">
+          Our AI analyzes your calculated FOIR, DTI ratio, and credit profile to highlight key strengths, warning flags, and personalized steps to improve your profile.
+        </p>
+
+        <button id="btn-fetch-ai-tips" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem;">
+          ✨ Generate AI Financial Tips
+        </button>
+      </div>
+
+      <div id="ai-tips-container" style="display: none;">
+        <!-- Rendered dynamically by aiTips.js with transparent source badging -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: GOOGLE SHEETS SYNC -->
+    <!-- ========================================================================= -->
+    <section id="tab-sheets" class="tab-panel" aria-labelledby="tab-sheets-heading">
+      <div class="page-intro">
+        <h1 id="tab-sheets-heading">Google Sheets Data Logging</h1>
+        <p>Store submitted assessment records securely into an educational Google Sheet via Google Apps Script Webhook.</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Submission Form Card -->
+        <div class="card">
+          <h2 class="card-title">Record Assessment</h2>
+          <div id="sheets-assessment-summary">
+            <!-- Populated dynamically by sheetsSubmission.js -->
+          </div>
+
+          <form id="sheets-submission-form">
+            <div class="form-group">
+              <label class="form-label" for="applicant-name">Applicant Name / Demo Alias</label>
+              <input type="text" id="applicant-name" class="form-control" placeholder="e.g. Alex Morgan" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="applicant-email">Email (Optional)</label>
+              <input type="email" id="applicant-email" class="form-control" placeholder="alex@example.com">
+            </div>
+
+            <button type="submit" class="btn btn-success btn-block">
+              📊 Submit to Google Sheet
+            </button>
+          </form>
+        </div>
+
+        <!-- Session History Card -->
+        <div class="card">
+          <h2 class="card-title">Recent Submissions (Session Log)</h2>
+          <div id="assessment-history-list">
+            <div style="font-size: 0.85rem; color: var(--color-text-muted); text-align: center; padding: 24px 0;">
+              No records submitted yet in this session.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <aside id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></aside>
+
+  <!-- Application Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div style="font-weight: 700; color: #f8fafc; font-size: 1rem;">
+        AI Loan Eligibility Checker • Academic Project
+      </div>
+      <p class="footer-disclaimer">
+        <strong>Academic Disclaimer:</strong> This application is developed strictly for educational demonstration and student project evaluation. It utilizes heuristic financial formulas to simulate credit evaluation and does not constitute real-world banking decisions, official loan approvals, or legal financial counseling.
+      </p>
+      <div style="font-size: 0.78rem; color: #64748b;">
+        Vanilla HTML5/CSS3/JavaScript Frontend • Node.js Express Backend • Anthropic Claude API Integration
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/loanChecker.js"></script>
+  <script src="./js/creditAnalyzer.js"></script>
+  <script src="./js/emiCalculator.js"></script>
+  <script src="./js/aiTips.js"></script>
+  <script src="./js/sheetsSubmission.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
