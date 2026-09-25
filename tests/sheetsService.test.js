@@ -6,7 +6,12 @@
 
 const test = require('node:test');
 const assert = require('node:assert');
-const { formatAssessmentRow, submitToSheets } = require('../server/services/sheetsService');
+const {
+  formatAssessmentRow,
+  submitToSheets,
+  getAssessmentHistory,
+  clearAssessmentHistory
+} = require('../server/services/sheetsService');
 
 const mockAssessmentData = {
   monthlyIncome: 85000,
@@ -174,4 +179,21 @@ test('Sheets Service - Webhook URL Leakage Prevention', async () => {
   } finally {
     process.env.GOOGLE_SHEETS_WEBHOOK_URL = savedUrl;
   }
+});
+
+test('Sheets Service - Dynamic In-Memory Assessment History Storage and Retrieval', async () => {
+  clearAssessmentHistory();
+  assert.strictEqual(getAssessmentHistory().length, 0);
+
+  await submitToSheets({
+    applicantName: 'Ananya Roy',
+    applicantEmail: 'ananya@example.com',
+    assessmentData: { monthlyIncome: 90000, requestedLoanAmount: 600000, status: 'Eligible' }
+  });
+
+  const history = getAssessmentHistory();
+  assert.strictEqual(history.length, 1);
+  assert.strictEqual(history[0].applicantName, 'Ananya Roy');
+  assert.strictEqual(history[0].monthlyIncome, 90000);
+  assert.ok(history[0].id.startsWith('rec_'));
 });

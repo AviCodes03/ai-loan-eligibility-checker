@@ -179,3 +179,39 @@ test('Infrastructure - Phase 5 Google Sheets Formatter & Unconfigured Handling',
   assert.strictEqual(submission.stored, false);
   assert.ok(submission.message.includes('unconfigured'));
 });
+
+test('Infrastructure - GET /api/health Endpoint Returns System Status', async () => {
+  const app = require('../server/index');
+  const server = app.listen(0);
+  const { port } = server.address();
+
+  try {
+    const res = await fetch(`http://localhost:${port}/api/health`);
+    assert.strictEqual(res.status, 200);
+    const body = await res.json();
+    assert.strictEqual(body.success, true);
+    assert.strictEqual(body.data.status, 'healthy');
+    assert.ok(body.data.app.includes('AI Loan Eligibility Checker'));
+    assert.ok(body.data.disclaimer.includes('Educational & Demo Project'));
+    assert.ok(body.data.integrations !== undefined);
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
+
+test('Infrastructure - GET /api/assessment/history Endpoint Returns Saved Records', async () => {
+  const app = require('../server/index');
+  const server = app.listen(0);
+  const { port } = server.address();
+
+  try {
+    const res = await fetch(`http://localhost:${port}/api/assessment/history`);
+    assert.strictEqual(res.status, 200);
+    const body = await res.json();
+    assert.strictEqual(body.success, true);
+    assert.ok(Array.isArray(body.data));
+    assert.strictEqual(typeof body.count, 'number');
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});

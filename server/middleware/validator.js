@@ -79,6 +79,18 @@ function validateLoanCheck(req, res, next) {
     }
   }
 
+  const { age } = req.body;
+  if (age !== undefined && age !== null && age !== '') {
+    if (!isValidNumber(age)) {
+      errors.push('Applicant age must be a valid number.');
+    } else {
+      const numAge = Number(age);
+      if (!Number.isInteger(numAge) || numAge < 18 || numAge > 100) {
+        errors.push('Applicant age must be a whole number between 18 and 100 years.');
+      }
+    }
+  }
+
   if (errors.length > 0) {
     return res.status(400).json({
       success: false,
@@ -94,6 +106,9 @@ function validateLoanCheck(req, res, next) {
   req.body.tenureMonths = Math.round(Number(tenureMonths));
   req.body.interestRate = Number(interestRate);
   req.body.creditScore = Math.round(Number(creditScore));
+  if (age !== undefined && age !== null && age !== '') {
+    req.body.age = Math.round(Number(age));
+  }
   if (req.body.employmentType) {
     req.body.employmentType = sanitizeString(req.body.employmentType);
   }

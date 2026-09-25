@@ -1,0 +1,8 @@
+# Netlify Deployment Configuration for AI Loan Eligibility Checker
+[build]
+  publish = "public"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

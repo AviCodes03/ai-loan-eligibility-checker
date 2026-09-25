@@ -1,5 +1,7 @@
 /**
  * Module 1: Loan Eligibility Checker UI Logic
+ * Synchronizes inputs, submits payload, caches assessment, and renders
+ * high-fidelity visual results with radial score gauge and metric cards.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const interestRate = parseFloat(rateInput.value);
       const creditScore = parseInt(document.getElementById('loan-credit-score').value, 10);
       const employmentType = document.getElementById('employment-type').value;
+      const ageInput = document.getElementById('applicant-age');
+      const age = ageInput ? parseInt(ageInput.value, 10) : 28;
 
       // Client-Side Pre-validation
       if (isNaN(monthlyIncome) || monthlyIncome <= 0) {
@@ -54,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (isNaN(creditScore) || creditScore < 300 || creditScore > 900) {
         window.appToast('Credit score must be between 300 and 900', 'error');
+        return;
+      }
+      if (ageInput && (isNaN(age) || age < 18 || age > 100)) {
+        window.appToast('Applicant age must be between 18 and 100 years', 'error');
         return;
       }
 
@@ -70,7 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
           tenureMonths,
           interestRate,
           creditScore,
-          employmentType
+          employmentType,
+          age
         });
 
         if (response.success) {
@@ -79,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Cache latest assessment for AI Coaching and Sheets submission
           window.latestAssessment = {
             ...response.data,
-            input: { monthlyIncome, existingEmi, requestedLoanAmount, tenureMonths, interestRate, creditScore, employmentType }
+            input: { monthlyIncome, existingEmi, requestedLoanAmount, tenureMonths, interestRate, creditScore, employmentType, age }
           };
         }
       } catch (err) {
@@ -103,51 +112,108 @@ document.addEventListener('DOMContentLoaded', () => {
       ? (data.status === 'Conditionally Eligible' ? 'var(--color-warning)' : 'var(--color-success)')
       : 'var(--color-danger)';
 
+    const statusBadgeBg = data.isEligible
+      ? (data.status === 'Conditionally Eligible' ? 'var(--color-warning-bg)' : 'var(--color-success-bg)')
+      : 'var(--color-danger-bg)';
+
+    const statusBadgeBorder = data.isEligible
+      ? (data.status === 'Conditionally Eligible' ? 'var(--color-warning-border)' : 'var(--color-success-border)')
+      : 'var(--color-danger-border)';
+
+    const score = Number(data.eligibilityScore) || 0;
+    // Radial gauge circumference: 2 * pi * 36 ~= 226.2
+    const circumference = 226.2;
+    const strokeDashoffset = circumference - (circumference * (score / 100));
+
     resultContainer.innerHTML = `
       <div class="result-box ${statusClass}">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <h3 style="font-size: 1.2rem; font-weight: 800;">Assessment Verdict</h3>
-          <span style="background: ${statusBadgeColor}; color: #fff; padding: 4px 12px; border-radius: 9999px; font-weight: 700; font-size: 0.85rem;">
-            ${data.status}
+        
+        <!-- Top Status Banner -->
+        <div class="result-top-banner">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-text-main); margin-bottom: 2px;">Assessment Verdict</h3>
+            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Deterministic Underwriting Rules Applied</span>
+          </div>
+          <span class="result-status-pill" style="background: ${statusBadgeBg}; color: ${statusBadgeColor}; border: 1px solid ${statusBadgeBorder};">
+            ${data.status === 'Eligible' ? '✓' : (data.status === 'Conditionally Eligible' ? '⚡' : '✕')} ${data.status}
           </span>
         </div>
 
-        <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-label">Eligibility Score</div>
-            <div class="stat-value" style="color: var(--color-primary);">${data.eligibilityScore || 0}<span style="font-size: 0.8rem; color: var(--color-text-muted);">/100</span></div>
+        <!-- Radial Score Hero Card -->
+        <div class="result-radial-container">
+          <div class="radial-ring-wrapper">
+            <svg viewBox="0 0 84 84">
+              <circle class="radial-ring-bg" cx="42" cy="42" r="36" />
+              <circle class="radial-ring-fill" cx="42" cy="42" r="36" 
+                      style="stroke: ${statusBadgeColor}; stroke-dasharray: ${circumference}; stroke-dashoffset: ${strokeDashoffset};" />
+            </svg>
+            <div class="radial-ring-text">
+              <span>${score}</span>
+              <span class="max-score">/ 100</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">Max Eligible Amount</div>
-            <div class="stat-value" style="color: var(--color-primary);">${window.APP_CONFIG.formatINR(data.maxEligibleAmount)}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Estimated Monthly EMI</div>
-            <div class="stat-value">${window.APP_CONFIG.formatINR(data.calculatedEmi)}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Calculated FOIR</div>
-            <div class="stat-value">${data.foir}%</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Risk Profile</div>
-            <div class="stat-value" style="font-size: 0.95rem;">${data.riskTier}</div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.76rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.04em;">Eligibility Score Rating</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--color-text-main); margin: 2px 0;">
+              ${score >= 75 ? 'Prime Borrowing Standing' : (score >= 55 ? 'Moderate Affordability Standing' : 'Constrained Borrowing Profile')}
+            </div>
+            <div style="font-size: 0.82rem; color: var(--color-text-muted);">
+              Risk Classification: <strong style="color: ${statusBadgeColor};">${data.riskTier}</strong>
+            </div>
           </div>
         </div>
 
-        <div style="margin-top: 14px;">
-          <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 6px;">Evaluation Notes:</h4>
-          <ul style="padding-left: 20px; font-size: 0.88rem; color: var(--color-text-main);">
-            ${data.reasons.map((r) => `<li style="margin-bottom: 4px;">${r}</li>`).join('')}
+        <!-- Key Financial Telemetry Grid -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Calculated FOIR</div>
+            <div class="stat-value" style="color: ${data.foir <= (data.maxPermissibleFoirPct || 50) ? 'var(--color-success)' : 'var(--color-danger)'};">
+              ${data.foir}%
+            </div>
+            <div style="font-size: 0.68rem; color: var(--color-text-muted); margin-top: 2px;">Limit: ${data.maxPermissibleFoirPct || 50}%</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Debt-to-Income</div>
+            <div class="stat-value">${data.dti}%</div>
+            <div style="font-size: 0.68rem; color: var(--color-text-muted); margin-top: 2px;">Total leverage</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Estimated EMI</div>
+            <div class="stat-value" style="color: var(--color-primary);">${window.APP_CONFIG.formatINR(data.calculatedEmi)}</div>
+            <div style="font-size: 0.68rem; color: var(--color-text-muted); margin-top: 2px;">Monthly commitment</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Max Borrowing Limit</div>
+            <div class="stat-value" style="color: var(--color-primary);">${window.APP_CONFIG.formatINR(data.maxEligibleAmount)}</div>
+            <div style="font-size: 0.68rem; color: var(--color-text-muted); margin-top: 2px;">Affordability cap</div>
+          </div>
+        </div>
+
+        <!-- Detailed Evaluation Notes -->
+        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--color-border);">
+          <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--color-text-main); margin-bottom: 10px;">
+            Deterministic Assessment Notes:
+          </h4>
+          <ul class="reasons-list">
+            ${data.reasons.map((r) => `
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="${statusBadgeColor}" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>${r}</span>
+              </li>
+            `).join('')}
           </ul>
         </div>
 
-        <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary" onclick="window.switchToTab('tab-ai-tips')">
-            ✨ Get AI Coaching Tips
+        <!-- Next Action CTAs -->
+        <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary" onclick="window.switchToTab('tab-ai-tips')" style="font-size: 0.88rem;">
+            <span>✨ Get AI Coaching Tips</span>
           </button>
-          <button type="button" class="btn btn-secondary" onclick="window.switchToTab('tab-sheets')">
-            📊 Save to Google Sheets
+          <button type="button" class="btn btn-secondary" onclick="window.switchToTab('tab-sheets')" style="font-size: 0.88rem;">
+            <span>📊 Save to Google Sheets</span>
           </button>
         </div>
       </div>

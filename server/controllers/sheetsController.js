@@ -3,7 +3,7 @@
  * Handles assessment persistence requests.
  */
 
-const { submitToSheets } = require('../services/sheetsService');
+const { submitToSheets, getAssessmentHistory } = require('../services/sheetsService');
 
 async function submitAssessment(req, res, next) {
   try {
@@ -24,6 +24,16 @@ async function submitAssessment(req, res, next) {
   }
 }
 
+function getHistory(req, res) {
+  const records = getAssessmentHistory();
+  return res.json({
+    success: true,
+    data: records,
+    count: records.length
+  });
+}
+
 module.exports = {
-  submitAssessment
+  submitAssessment,
+  getHistory
 };

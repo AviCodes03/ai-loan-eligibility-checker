@@ -71,13 +71,16 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         ` : ''}
 
-        <div class="insight-card" style="margin-top: 16px;">
-          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary); margin-bottom: 6px;">Executive Assessment</h4>
-          <p style="font-size: 0.9rem; line-height: 1.6;">${data.summary}</p>
+        <div class="ai-executive-glass-card">
+          <div class="exec-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <h4 class="exec-title">Executive Strategic Assessment</h4>
+          </div>
+          <p class="exec-body">${data.summary}</p>
         </div>
 
         <div class="grid-2col" style="margin-top: 16px;">
-          <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px;">
             <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--color-success); margin-bottom: 8px;">
               ✓ Financial Strengths
             </h4>
@@ -86,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
           </div>
 
-          <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px;">
             <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--color-danger); margin-bottom: 8px;">
               ⚠ Vulnerabilities & Risks
             </h4>

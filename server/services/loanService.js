@@ -18,6 +18,7 @@ const { calculateEmi } = require('./emiService');
  * @param {number} params.interestRate - Annual interest rate percentage
  * @param {number} params.creditScore - Credit score (300-900)
  * @param {string} [params.employmentType] - Employment type
+ * @param {number} [params.age] - Applicant age in years (default 28)
  * @returns {object} Deterministic assessment results
  */
 function evaluateLoanEligibility({
@@ -27,9 +28,15 @@ function evaluateLoanEligibility({
   tenureMonths,
   interestRate,
   creditScore,
-  employmentType = 'Salaried'
+  employmentType = 'Salaried',
+  age = 28
 }) {
   const reasons = [];
+
+  // Age benchmark check (Demo standard: 21 to 65 years at loan maturity)
+  const maturityAge = age + (tenureMonths / 12);
+  const isUnderage = age < 21;
+  const isPostRetirement = maturityAge > 65;
 
   // 1. Calculate Proposed Loan's Monthly EMI
   const emiSummary = calculateEmi(requestedLoanAmount, interestRate, tenureMonths);
@@ -160,6 +167,20 @@ function evaluateLoanEligibility({
     reasons.push(`Requested amount of ₹${requestedLoanAmount.toLocaleString('en-IN')} is within maximum estimated capacity of ₹${adjustedMaxEligibleAmount.toLocaleString('en-IN')}.`);
   }
 
+  // Age gating evaluations
+  if (isUnderage) {
+    status = 'Ineligible';
+    isEligible = false;
+    riskTier = 'High Risk (Age Criteria)';
+    reasons.unshift(`Applicant age (${age} years) is below the demo primary borrower threshold of 21 years (requires an adult co-applicant or guarantor).`);
+  } else if (isPostRetirement && isEligible) {
+    if (status === 'Eligible') {
+      status = 'Conditionally Eligible';
+      riskTier = 'Moderate Risk (Tenure Past Retirement)';
+    }
+    reasons.push(`Loan tenure extends to age ${Math.round(maturityAge)}, surpassing the demo retirement benchmark of 65 years. Lenders typically require tenure reduction or joint applicant.`);
+  }
+
   // Educational note regarding demo criteria
   reasons.push('Note: These conclusions are calculated using transparent demo formulas and are not an official bank sanction.');
 
@@ -168,6 +189,7 @@ function evaluateLoanEligibility({
     status,
     eligibilityScore,
     riskTier,
+    applicantAge: age,
     monthlyIncome,
     existingEmi,
     requestedLoanAmount,

@@ -59,8 +59,9 @@ router.post('/credit/analyze', validateCreditAnalysis, creditController.analyze)
 router.post('/ai/tips', validateAiTipsRequest, aiController.getFinancialTips);
 
 /**
- * Assessment Submission Endpoint (Prepared for Phase 5)
+ * Assessment Submission & Retrieval Endpoints (Phase 5)
  */
+router.get('/assessment/history', sheetsController.getHistory);
 router.post('/assessment/submit', validateAssessmentSubmission, sheetsController.submitAssessment);
 
 module.exports = router;

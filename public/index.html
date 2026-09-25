@@ -1,56 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI Loan Eligibility Checker - Educational financial evaluation platform featuring deterministic eligibility rules, credit analyzer, EMI calculator, and Claude AI coaching.">
-  <title>AI Loan Eligibility Checker | Academic Financial Demo</title>
+  <meta name="description" content="AI Loan Eligibility Checker - Modern fintech educational financial assessment platform featuring deterministic banking benchmarks, credit score analysis, reducing-balance EMI calculations, and Anthropic Claude AI financial coaching.">
+  <title>AI Loan Eligibility Checker | Smart Financial Assessment Platform</title>
   
   <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%234f46e5%22 stroke-width=%222%22><path d=%22M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z%22/></svg>">
 </head>
 <body>
 
-  <!-- Top Educational Disclaimer Banner -->
-  <aside class="disclaimer-banner" role="alert" aria-label="Academic project disclaimer">
-    <span class="badge">Academic Demo</span>
-    <span>This application is an educational prototype and does <strong>not</strong> issue actual banking decisions or certified financial advice.</span>
+  <!-- Top Educational Disclaimer / Announcement Bar -->
+  <aside class="top-notice-bar" role="alert" aria-label="Educational demo disclaimer">
+    <span class="notice-pill">Academic Demo</span>
+    <span class="notice-text">
+      Educational demonstration model using transparent banking algorithms. Not an official lender decision or certified financial counsel.
+    </span>
   </aside>
 
-  <!-- Application Header -->
+  <!-- Application Header & Sticky Navigation -->
   <header class="app-header">
     <div class="header-container">
-      <div class="brand">
-        <div class="brand-icon" aria-hidden="true">🏦</div>
-        <div>
-          <div class="brand-title">AI Loan Eligibility Checker</div>
-          <div class="brand-subtitle">Smart Academic Financial Evaluation System</div>
+      
+      <!-- Brand Logo -->
+      <a class="brand" data-tab="tab-home" onclick="window.switchToTab('tab-home'); return false;" href="#home" aria-label="AI Loan Eligibility Checker Home">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/>
+          </svg>
         </div>
-      </div>
+        <div class="brand-text">
+          <span class="brand-title">AI Loan Eligibility Checker</span>
+          <span class="brand-subtitle">Fintech Assessment & AI Coaching</span>
+        </div>
+      </a>
 
-      <!-- Navigation Tabs -->
-      <nav class="nav-tabs" aria-label="Module Navigation">
-        <button class="tab-btn active" data-tab="tab-loan-checker">
-          <span>📋</span> Eligibility Checker
+      <!-- Desktop Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button type="button" id="nav-tab-home" class="tab-btn active" data-tab="tab-home" onclick="window.switchToTab('tab-home')" aria-label="Home Overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
         </button>
-        <button class="tab-btn" data-tab="tab-credit-analyzer">
-          <span>🎯</span> Credit Analyzer
+        <button type="button" id="nav-tab-loan-checker" class="tab-btn" data-tab="tab-loan-checker" onclick="window.switchToTab('tab-loan-checker')" aria-label="Loan Eligibility Checker">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>Loan Eligibility Checker</span>
         </button>
-        <button class="tab-btn" data-tab="tab-emi-calc">
-          <span>🧮</span> EMI Calculator
+        <button type="button" id="nav-tab-credit-analyzer" class="tab-btn" data-tab="tab-credit-analyzer" onclick="window.switchToTab('tab-credit-analyzer')" aria-label="Credit Score Analyzer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V8"/></svg>
+          <span>Credit Analyzer</span>
         </button>
-        <button class="tab-btn" data-tab="tab-ai-tips">
-          <span>✨</span> AI Financial Coach
+        <button type="button" id="nav-tab-emi-calc" class="tab-btn" data-tab="tab-emi-calc" onclick="window.switchToTab('tab-emi-calc')" aria-label="EMI Calculator">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          <span>EMI Calculator</span>
         </button>
-        <button class="tab-btn" data-tab="tab-sheets">
-          <span>📊</span> Sheets Sync
+        <button type="button" id="nav-tab-ai-tips" class="tab-btn" data-tab="tab-ai-tips" onclick="window.switchToTab('tab-ai-tips')" aria-label="AI Financial Tips">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span>AI Financial Tips</span>
+        </button>
+        <button type="button" id="nav-tab-sheets" class="tab-btn" data-tab="tab-sheets" onclick="window.switchToTab('tab-sheets')" aria-label="Sheets Sync">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Sheets Sync</span>
         </button>
       </nav>
 
-      <div id="system-status-badge" style="font-size: 0.78rem; font-weight: 700; color: var(--color-text-muted);">
-        ● Checking status...
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button type="button" id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme (Dark / Light)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <span class="theme-label">Light Mode</span>
+        </button>
+        <div id="system-status-badge" class="header-status-badge">
+          ● Checking status...
+        </div>
+        <button type="button" class="btn btn-primary header-cta-btn" data-tab="tab-loan-checker" onclick="window.switchToTab('tab-loan-checker')">
+          Check Eligibility
+        </button>
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" id="mobile-menu-btn" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer">
+      <button type="button" id="mobile-tab-home" class="tab-btn active" data-tab="tab-home" onclick="window.switchToTab('tab-home')">
+        <span>Home / Overview</span>
+      </button>
+      <button type="button" id="mobile-tab-loan-checker" class="tab-btn" data-tab="tab-loan-checker" onclick="window.switchToTab('tab-loan-checker')">
+        <span>Loan Eligibility Checker</span>
+      </button>
+      <button type="button" id="mobile-tab-credit-analyzer" class="tab-btn" data-tab="tab-credit-analyzer" onclick="window.switchToTab('tab-credit-analyzer')">
+        <span>Credit Score Analyzer</span>
+      </button>
+      <button type="button" id="mobile-tab-emi-calc" class="tab-btn" data-tab="tab-emi-calc" onclick="window.switchToTab('tab-emi-calc')">
+        <span>EMI & Amortization Calculator</span>
+      </button>
+      <button type="button" id="mobile-tab-ai-tips" class="tab-btn" data-tab="tab-ai-tips" onclick="window.switchToTab('tab-ai-tips')">
+        <span>AI Financial Coaching</span>
+      </button>
+      <button type="button" id="mobile-tab-sheets" class="tab-btn" data-tab="tab-sheets" onclick="window.switchToTab('tab-sheets')">
+        <span>Google Sheets Sync</span>
+      </button>
     </div>
   </header>
 
@@ -58,105 +126,378 @@
   <main class="main-content">
 
     <!-- ========================================================================= -->
+    <!-- TAB 0: HOME / LANDING VIEW -->
+    <!-- ========================================================================= -->
+    <section id="tab-home" class="tab-panel active" aria-labelledby="hero-main-heading">
+      
+      <!-- Premium Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="pill-dot"></span>
+            <span>Intelligent Financial Decision Engine</span>
+          </div>
+          
+          <h1 id="hero-main-heading" class="hero-title">
+            Know Your Loan Eligibility. <br>
+            <span class="gradient-text">Make Smarter Decisions.</span>
+          </h1>
+          
+          <p class="hero-description">
+            Experience institutional-grade financial analysis powered by deterministic banking algorithms (FOIR, DTI, reducing-balance EMI) and contextual guidance from Anthropic Claude AI.
+          </p>
+
+          <div class="hero-cta-group">
+            <button type="button" id="hero-btn-check-eligibility" class="btn btn-primary" data-tab="tab-loan-checker" style="padding: 12px 24px; font-size: 1rem;" onclick="window.switchToTab('tab-loan-checker')">
+              <span>Check Eligibility</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <button type="button" id="hero-btn-calculate-emi" class="btn btn-secondary" data-tab="tab-emi-calc" style="padding: 12px 22px; font-size: 1rem;" onclick="window.switchToTab('tab-emi-calc')">
+              <span>Calculate EMI</span>
+            </button>
+          </div>
+
+          <div class="hero-trust-bar">
+            <div class="trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Deterministic Banking Rules</span>
+            </div>
+            <div class="trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>No Credit Bureau Impact</span>
+            </div>
+            <div class="trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Claude AI Literacy Tips</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right: Interactive SaaS Dashboard Preview -->
+        <div class="hero-visual">
+          <div class="saas-mockup-card">
+            <div class="mockup-header">
+              <div class="mockup-header-title">
+                <span class="live-dot"></span>
+                <span>Live Assessment Simulation</span>
+              </div>
+              <span class="mockup-tier-badge">
+                Tier 1 Prime Profile
+              </span>
+            </div>
+
+            <!-- Radial Score Preview -->
+            <div class="mockup-score-hero">
+              <div class="score-radial-preview">
+                <div class="score-circle-preview"></div>
+                <div class="score-label-preview">
+                  <div class="title">Eligibility Score</div>
+                  <div class="status">✓ Eligible for Sanction</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Max Borrowing Limit</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #a5b4fc; font-family: var(--font-mono);">₹18,45,000</div>
+              </div>
+            </div>
+
+            <!-- Financial Metrics Grid -->
+            <div class="mockup-grid-stats">
+              <div class="mockup-stat-cell">
+                <div class="stat-lbl">Monthly EMI</div>
+                <div class="stat-val" style="color: #f8fafc;">₹16,254<span style="font-size: 0.75rem; color: #94a3b8;">/mo</span></div>
+              </div>
+              <div class="mockup-stat-cell">
+                <div class="stat-lbl">Credit Score</div>
+                <div class="stat-val" style="color: #34d399;">780 <span style="font-size: 0.72rem; font-weight: 600; color: #34d399;">(Excellent)</span></div>
+              </div>
+              <div class="mockup-stat-cell">
+                <div class="stat-lbl">Calculated FOIR</div>
+                <div class="stat-val" style="color: #34d399;">35.0% <span style="font-size: 0.72rem; color: #34d399; font-weight: 600;">(Healthy)</span></div>
+              </div>
+              <div class="mockup-stat-cell">
+                <div class="stat-lbl">Debt-to-Income</div>
+                <div class="stat-val" style="color: #34d399;">21.7% <span style="font-size: 0.72rem; color: #34d399; font-weight: 600;">(Low)</span></div>
+              </div>
+            </div>
+
+            <!-- Mockup Footer Action -->
+            <div class="mockup-footer-note">
+              <span>Deterministic algorithm verified</span>
+              <a href="#" onclick="window.switchToTab('tab-loan-checker'); return false;" style="color: #818cf8; font-weight: 700; text-decoration: none;">
+                Run Your Assessment &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature / Module Cards Section -->
+      <div class="module-cards-section">
+        <div class="section-header">
+          <div class="section-tag">Modular Assessment Toolkit</div>
+          <h2 class="section-title">Four Specialized Financial Calculators</h2>
+          <p class="section-subtitle">Each module addresses a critical pillar of creditworthiness, affordability, and debt planning.</p>
+        </div>
+
+        <div class="module-grid">
+          <!-- Card 1: Loan Eligibility -->
+          <div class="module-card" data-tab="tab-loan-checker" onclick="window.switchToTab('tab-loan-checker')">
+            <div>
+              <div class="module-icon-wrap indigo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <h3 class="module-title">Loan Eligibility</h3>
+              <p class="module-desc">Analyze your FOIR, DTI ratio, and disposable income to determine maximum borrowing limits and approval status.</p>
+            </div>
+            <div class="module-action">
+              <span>Evaluate Eligibility</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 2: Credit Analyzer -->
+          <div class="module-card" data-tab="tab-credit-analyzer" onclick="window.switchToTab('tab-credit-analyzer')">
+            <div>
+              <div class="module-icon-wrap teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V8"/></svg>
+              </div>
+              <h3 class="module-title">Credit Score Analyzer</h3>
+              <p class="module-desc">Simulate credit health across 5 weighted factors: payment history, utilization, length, mix, and recent inquiries.</p>
+            </div>
+            <div class="module-action">
+              <span>Analyze Credit</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 3: EMI Calculator -->
+          <div class="module-card" data-tab="tab-emi-calc" onclick="window.switchToTab('tab-emi-calc')">
+            <div>
+              <div class="module-icon-wrap amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+              </div>
+              <h3 class="module-title">EMI Calculator</h3>
+              <p class="module-desc">Compute monthly installments using the reducing-balance formula, with full amortization tables and interest breakdown.</p>
+            </div>
+            <div class="module-action">
+              <span>Calculate EMI</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 4: AI Coaching -->
+          <div class="module-card" data-tab="tab-ai-tips" onclick="window.switchToTab('tab-ai-tips')">
+            <div>
+              <div class="module-icon-wrap violet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              </div>
+              <h3 class="module-title">AI Financial Tips</h3>
+              <p class="module-desc">Gain qualitative, constructive financial coaching powered by Anthropic Claude AI, backed by transparent offline fallback.</p>
+            </div>
+            <div class="module-action">
+              <span>Get AI Advice</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Pillars Card -->
+      <div class="edu-pillars-section">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-text-main);">
+          Institutional Financial Principles (Educational Model)
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 4px;">
+          This platform is designed to demystify retail credit underwriting benchmarks without proprietary obscurity.
+        </p>
+
+        <div class="edu-pillars-grid">
+          <div class="pillar-card">
+            <div class="pillar-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Deterministic Algorithms</span>
+            </div>
+            <div class="pillar-desc">
+              All financial scores, debt limits, and EMI figures are calculated exclusively via mathematical formulas. AI cannot override numbers.
+            </div>
+          </div>
+
+          <div class="pillar-card">
+            <div class="pillar-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Zero Credential Exposure</span>
+            </div>
+            <div class="pillar-desc">
+              Sensitive API keys and Google Sheets webhooks reside solely on the Node.js backend. Client responses and logs remain sanitized.
+            </div>
+          </div>
+
+          <div class="pillar-card">
+            <div class="pillar-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Demonstration Thresholds</span>
+            </div>
+            <div class="pillar-desc">
+              FOIR thresholds (40%–60%) and credit bands are configurable benchmarks for learning. Actual lender criteria vary by institution.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
     <!-- TAB 1: LOAN ELIGIBILITY CHECKER -->
     <!-- ========================================================================= -->
-    <section id="tab-loan-checker" class="tab-panel active" aria-labelledby="tab-loan-heading">
+    <section id="tab-loan-checker" class="tab-panel" aria-labelledby="tab-loan-heading">
       <div class="page-intro">
         <h1 id="tab-loan-heading">Loan Eligibility Assessment</h1>
-        <p>Input your income, existing obligations, and desired loan parameters. Our deterministic financial engine evaluates your Debt-to-Income (DTI) and Fixed Obligation to Income Ratio (FOIR).</p>
+        <p>Evaluate your borrowing capacity using standard banking debt-service metrics including Fixed Obligation to Income Ratio (FOIR) and Debt-to-Income (DTI).</p>
       </div>
 
       <div class="grid-2col">
         <!-- Input Form Card -->
         <div class="card">
-          <h2 class="card-title">Applicant Financial Profile</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Applicant Financial Profile</span>
+          </h2>
+          
           <form id="loan-check-form">
-            <div class="form-group">
-              <label class="form-label" for="monthly-income">
-                <span>Net Monthly Income (₹)</span>
-              </label>
-              <input type="number" id="monthly-income" class="form-control" placeholder="e.g. 50000" min="1" step="1000" value="50000" required>
-            </div>
+            
+            <!-- Fieldset 1: Income & Debt -->
+            <fieldset class="form-section-fieldset">
+              <legend class="form-section-legend">1. Monthly Cash Flow & Obligations</legend>
+              
+              <div class="form-group">
+                <label class="form-label" for="monthly-income">
+                  <span>Net Monthly Income (₹)</span>
+                  <span style="font-size: 0.75rem; color: var(--color-text-muted);">After tax</span>
+                </label>
+                <input type="number" id="monthly-income" class="form-control" placeholder="e.g. 50000" min="1" step="1000" value="50000" required>
+              </div>
 
-            <div class="form-group">
-              <label class="form-label" for="existing-emi">
-                <span>Existing Monthly Debt EMIs (₹)</span>
-              </label>
-              <input type="number" id="existing-emi" class="form-control" placeholder="e.g. 10000" min="0" step="500" value="10000">
-            </div>
+              <div class="form-group">
+                <label class="form-label" for="existing-emi">
+                  <span>Existing Monthly Debt EMIs (₹)</span>
+                  <span style="font-size: 0.75rem; color: var(--color-text-muted);">Total ongoing loans</span>
+                </label>
+                <input type="number" id="existing-emi" class="form-control" placeholder="e.g. 10000" min="0" step="500" value="10000">
+              </div>
+            </fieldset>
 
-            <div class="form-group">
-              <div class="form-label">
-                <label for="loan-amount-input">Requested Loan Amount</label>
-                <span id="display-loan-amount" class="val-display">₹10,00,000</span>
+            <!-- Fieldset 2: Requested Loan Parameters -->
+            <fieldset class="form-section-fieldset">
+              <legend class="form-section-legend">2. Requested Loan Terms</legend>
+              
+              <!-- Loan Amount -->
+              <div class="form-group">
+                <div class="form-label">
+                  <label for="loan-amount-input">Requested Loan Principal</label>
+                  <span id="display-loan-amount" class="val-display">₹10,00,000</span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="loan-amount-slider" class="form-range" min="50000" max="10000000" step="25000" value="1000000" aria-label="Requested Loan Amount Slider">
+                  <input type="number" id="loan-amount-input" class="form-control" min="50000" max="10000000" step="25000" value="1000000">
+                </div>
+                <!-- Quick Amount Presets -->
+                <div class="quick-chips-group">
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-amount-slider').value=500000; document.getElementById('loan-amount-slider').dispatchEvent(new Event('input'))">₹5 Lakh</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-amount-slider').value=1000000; document.getElementById('loan-amount-slider').dispatchEvent(new Event('input'))">₹10 Lakh</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-amount-slider').value=2500000; document.getElementById('loan-amount-slider').dispatchEvent(new Event('input'))">₹25 Lakh</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-amount-slider').value=5000000; document.getElementById('loan-amount-slider').dispatchEvent(new Event('input'))">₹50 Lakh</button>
+                </div>
               </div>
-              <div class="slider-container">
-                <input type="range" id="loan-amount-slider" class="form-range" min="50000" max="10000000" step="25000" value="1000000" aria-label="Requested Loan Amount Slider">
-                <input type="number" id="loan-amount-input" class="form-control" min="50000" max="10000000" step="25000" value="1000000">
-              </div>
-            </div>
 
-            <div class="form-group">
-              <div class="form-label">
-                <label for="loan-tenure-input">Loan Tenure (Months)</label>
-                <span id="display-loan-tenure" class="val-display">60 mos</span>
+              <!-- Loan Tenure -->
+              <div class="form-group">
+                <div class="form-label">
+                  <label for="loan-tenure-input">Loan Tenure (Months)</label>
+                  <span id="display-loan-tenure" class="val-display">60 mos</span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="loan-tenure-slider" class="form-range" min="6" max="360" step="6" value="60" aria-label="Loan Tenure Slider">
+                  <input type="number" id="loan-tenure-input" class="form-control" min="6" max="360" step="6" value="60">
+                </div>
+                <!-- Quick Tenure Presets -->
+                <div class="quick-chips-group">
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-tenure-slider').value=12; document.getElementById('loan-tenure-slider').dispatchEvent(new Event('input'))">1 Year</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-tenure-slider').value=36; document.getElementById('loan-tenure-slider').dispatchEvent(new Event('input'))">3 Years</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-tenure-slider').value=60; document.getElementById('loan-tenure-slider').dispatchEvent(new Event('input'))">5 Years</button>
+                  <button type="button" class="quick-chip" onclick="document.getElementById('loan-tenure-slider').value=120; document.getElementById('loan-tenure-slider').dispatchEvent(new Event('input'))">10 Years</button>
+                </div>
               </div>
-              <div class="slider-container">
-                <input type="range" id="loan-tenure-slider" class="form-range" min="6" max="360" step="6" value="60" aria-label="Loan Tenure Slider">
-                <input type="number" id="loan-tenure-input" class="form-control" min="6" max="360" step="6" value="60">
-              </div>
-            </div>
 
-            <div class="form-group">
-              <div class="form-label">
-                <label for="loan-rate-input">Expected Interest Rate (% APR)</label>
-                <span id="display-loan-rate" class="val-display">8.5%</span>
+              <!-- Interest Rate -->
+              <div class="form-group">
+                <div class="form-label">
+                  <label for="loan-rate-input">Expected Interest Rate (% APR)</label>
+                  <span id="display-loan-rate" class="val-display">8.5%</span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="loan-rate-slider" class="form-range" min="1" max="25" step="0.1" value="8.5" aria-label="Interest Rate Slider">
+                  <input type="number" id="loan-rate-input" class="form-control" min="1" max="25" step="0.1" value="8.5">
+                </div>
               </div>
-              <div class="slider-container">
-                <input type="range" id="loan-rate-slider" class="form-range" min="1" max="25" step="0.1" value="8.5" aria-label="Interest Rate Slider">
-                <input type="number" id="loan-rate-input" class="form-control" min="1" max="25" step="0.1" value="8.5">
-              </div>
-            </div>
+            </fieldset>
 
-            <div class="grid-2col" style="gap: 12px;">
+            <!-- Fieldset 3: Credit & Employment -->
+            <fieldset class="form-section-fieldset">
+              <legend class="form-section-legend">3. Applicant Demographics & Credit</legend>
+              
+              <div class="grid-2col" style="gap: 14px;">
+                <div class="form-group">
+                  <label class="form-label" for="applicant-age">
+                    <span>Applicant Age (Years)</span>
+                    <span style="font-size: 0.72rem; color: var(--color-text-muted);">21–65 standard</span>
+                  </label>
+                  <input type="number" id="applicant-age" class="form-control" min="18" max="100" value="28" placeholder="e.g. 28">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="employment-type">Employment Status</label>
+                  <select id="employment-type" class="form-control">
+                    <option value="Salaried">Salaried Employee</option>
+                    <option value="Self-Employed">Self-Employed / Business</option>
+                    <option value="Student">Student / Academic</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="form-label" for="loan-credit-score">Credit Score (300-900)</label>
                 <input type="number" id="loan-credit-score" class="form-control" min="300" max="900" value="740" required>
               </div>
-              <div class="form-group">
-                <label class="form-label" for="employment-type">Employment Status</label>
-                <select id="employment-type" class="form-control">
-                  <option value="Salaried">Salaried Employee</option>
-                  <option value="Self-Employed">Self-Employed / Business</option>
-                  <option value="Student">Student / Academic</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
+            </fieldset>
 
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">
-              Assess Loan Eligibility
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 4px; padding: 12px;">
+              <span>Assess Loan Eligibility</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </form>
         </div>
 
-        <!-- Result Card / Placeholder -->
+        <!-- Result Card / Educational Explanation Column -->
         <div>
-          <div id="loan-result-container" style="display: none;">
-            <!-- Rendered dynamically by loanChecker.js -->
-          </div>
+          <!-- Dynamic Result Container (Populated by loanChecker.js) -->
+          <div id="loan-result-container" style="display: none;"></div>
 
+          <!-- Educational Methodology Card -->
           <div class="card" style="margin-top: 0;">
-            <h2 class="card-title">How Eligibility Is Calculated (Educational Demo)</h2>
+            <h2 class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Underwriting Methodology (Demo)</span>
+            </h2>
             <div style="font-size: 0.88rem; color: var(--color-text-muted); line-height: 1.6;">
-              <p style="margin-bottom: 8px;">
-                <strong>1. Fixed Obligation to Income Ratio (FOIR):</strong> Evaluates the portion of monthly income dedicated to servicing existing and requested EMIs. <em>(Note: The 40%–60% FOIR thresholds used in this project are example/demo criteria; in practice, DTI and FOIR requirements are configurable and vary across different lenders.)</em>
+              <p style="margin-bottom: 12px;">
+                <strong style="color: var(--color-text-main);">1. Fixed Obligation to Income Ratio (FOIR):</strong> Evaluates total monthly EMI burdens against net income. <em>(Note: The 40%–60% demo benchmarks used here are configurable illustrative limits; actual bank limits vary).</em>
               </p>
-              <p style="margin-bottom: 8px;">
-                <strong>2. Credit Tier Gating:</strong> In this application's demonstration model, credit scores &ge; 750 represent prime eligibility benchmarks. Scores below 650 are flagged for conditional requirements or co-applicants. Example/demo threshold used by this application; lender requirements may vary.
+              <p style="margin-bottom: 12px;">
+                <strong style="color: var(--color-text-main);">2. Tier Gating:</strong> Prime credit scores (&ge; 750) qualify for maximum borrowing leverage. Scores below 650 indicate conditional underwriting or security requirements.
               </p>
               <p>
-                <strong>3. Mathematical Determinism:</strong> Eligibility determinations, FOIR limits, and maximum loan amounts are calculated 100% by deterministic code algorithms. Claude AI is strictly reserved for qualitative financial coaching.
+                <strong style="color: var(--color-text-main);">3. Deterministic Separation:</strong> All financial scores and sanction limits are produced by deterministic mathematical algorithms. AI coaching provides educational literacy only.
               </p>
             </div>
           </div>
@@ -170,13 +511,17 @@
     <section id="tab-credit-analyzer" class="tab-panel" aria-labelledby="tab-credit-heading">
       <div class="page-intro">
         <h1 id="tab-credit-heading">Credit Score Health Analyzer</h1>
-        <p>Explore how credit bureaus weigh payment consistency, utilization, account age, and inquiries to establish risk tiers.</p>
+        <p>Simulate how payment consistency, revolving debt utilization, credit vintage, and recent inquiries impact overall credit health.</p>
       </div>
 
       <div class="grid-2col">
         <!-- Interactive Credit Gauge Card -->
         <div class="card">
-          <h2 class="card-title">Credit Gauge Simulator</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V8"/></svg>
+            <span>Credit Meter Simulation</span>
+          </h2>
+          
           <div class="gauge-wrapper">
             <div class="credit-meter">
               <div class="credit-meter-bg"></div>
@@ -190,7 +535,7 @@
           <form id="credit-analyzer-form" style="margin-top: 16px;">
             <div class="form-group">
               <label class="form-label" for="credit-score-slider">
-                <span>Credit Score (300 – 900)</span>
+                <span>Credit Score Range (300 – 900)</span>
               </label>
               <div class="slider-container">
                 <input type="range" id="credit-score-slider" class="form-range" min="300" max="900" step="5" value="720">
@@ -231,30 +576,34 @@
           </form>
         </div>
 
-        <!-- Credit Factor Analysis Output -->
+        <!-- Credit Factor Analysis Output Column -->
         <div>
           <div id="credit-result-container">
             <div class="card">
-              <h2 class="card-title">Credit Tier Standards (Demo Model)</h2>
-              <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 12px;">
-                Example/demo benchmarks used by this application. Actual risk tiers and interest rates vary by lender.
+              <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span>Credit Score Bands (Demo Model)</span>
+              </h2>
+              <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 14px;">
+                Demo categorization for learning purposes. Proprietary scoring models vary by bureau.
               </p>
+              
               <ul style="font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 10px;">
-                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                <li style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--color-border);">
                   <span><strong>750 – 900:</strong> Excellent</span>
-                  <span style="color: var(--color-success); font-weight: 700;">Prime Rates</span>
+                  <span style="color: var(--color-success); font-weight: 700;">Prime Terms</span>
                 </li>
-                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                <li style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--color-border);">
                   <span><strong>700 – 749:</strong> Good</span>
-                  <span style="color: var(--color-accent); font-weight: 700;">Standard Approval</span>
+                  <span style="color: #0ea5e9; font-weight: 700;">Standard Approval</span>
                 </li>
-                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                <li style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--color-border);">
                   <span><strong>650 – 699:</strong> Fair</span>
-                  <span style="color: var(--color-warning); font-weight: 700;">Conditional</span>
+                  <span style="color: var(--color-warning); font-weight: 700;">Conditional Terms</span>
                 </li>
-                <li style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--color-border);">
+                <li style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--color-border);">
                   <span><strong>550 – 649:</strong> Poor</span>
-                  <span style="color: #f97316; font-weight: 700;">Collateral Required</span>
+                  <span style="color: #f97316; font-weight: 700;">Security Required</span>
                 </li>
                 <li style="display: flex; justify-content: space-between;">
                   <span><strong>300 – 549:</strong> Critical</span>
@@ -273,13 +622,16 @@
     <section id="tab-emi-calc" class="tab-panel" aria-labelledby="tab-emi-heading">
       <div class="page-intro">
         <h1 id="tab-emi-heading">Interactive EMI & Amortization Calculator</h1>
-        <p>Simulate Equated Monthly Installments (EMI) using the banking reducing-balance method, with full principal vs interest breakdown.</p>
+        <p>Simulate Equated Monthly Installments using standard reducing-balance formulas, with full interest versus principal breakdown.</p>
       </div>
 
       <div class="grid-2col">
         <!-- Input Sliders Card -->
         <div class="card">
-          <h2 class="card-title">Loan Parameters</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+            <span>Loan Parameters</span>
+          </h2>
 
           <div class="form-group">
             <div class="form-label">
@@ -315,13 +667,18 @@
           </div>
         </div>
 
-        <!-- Summary & Proportion Bar -->
+        <!-- Payment Summary & Proportion Bar -->
         <div class="card">
-          <h2 class="card-title">Payment Summary</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Payment Summary</span>
+          </h2>
 
-          <div style="text-align: center; padding: 16px 0;">
-            <div style="font-size: 0.82rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Monthly EMI Payable</div>
-            <div id="emi-monthly-val" style="font-size: 2.4rem; font-weight: 800; color: var(--color-primary);">₹15,900</div>
+          <div class="emi-hero-card">
+            <div style="font-size: 0.78rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.04em;">
+              Monthly EMI Payable
+            </div>
+            <div id="emi-monthly-val" class="emi-val-big">₹15,900</div>
           </div>
 
           <div class="stat-grid">
@@ -330,19 +687,20 @@
               <div id="emi-total-interest" class="stat-value" style="color: var(--color-warning);">₹72,395</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Total Payment</div>
+              <div class="stat-label">Total Repayment</div>
               <div id="emi-total-payment" class="stat-value">₹5,72,395</div>
             </div>
           </div>
 
-          <div style="margin-top: 16px;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px;">
-              <span>Principal: <span id="emi-pct-principal">87.4%</span></span>
-              <span>Interest: <span id="emi-pct-interest">12.6%</span></span>
+          <!-- Proportion Breakdown -->
+          <div class="proportion-bar-wrapper">
+            <div class="proportion-legend">
+              <span>Principal: <strong id="emi-pct-principal" style="color: var(--color-primary);">87.4%</strong></span>
+              <span>Interest: <strong id="emi-pct-interest" style="color: var(--color-warning);">12.6%</strong></span>
             </div>
-            <div style="display: flex; height: 12px; border-radius: 9999px; overflow: hidden;">
-              <div id="emi-bar-principal" style="width: 87.4%; background: var(--color-primary);"></div>
-              <div id="emi-bar-interest" style="width: 12.6%; background: var(--color-warning);"></div>
+            <div class="proportion-bar">
+              <div id="emi-bar-principal" class="bar-segment-principal" style="width: 87.4%;"></div>
+              <div id="emi-bar-interest" class="bar-segment-interest" style="width: 12.6%;"></div>
             </div>
           </div>
         </div>
@@ -350,17 +708,20 @@
 
       <!-- Amortization Schedule Table -->
       <div class="card" style="margin-top: 24px;">
-        <h2 class="card-title">Amortization Schedule (Reducing Balance)</h2>
+        <h2 class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          <span>Amortization Schedule (Reducing Balance)</span>
+        </h2>
         <div class="table-responsive">
           <table class="table">
             <thead>
               <tr>
                 <th>Period</th>
-                <th>Opening Balance</th>
+                <th>Opening Principal</th>
                 <th>Monthly EMI</th>
-                <th>Principal Paid</th>
-                <th>Interest Paid</th>
-                <th>Closing Balance</th>
+                <th>Principal Repaid</th>
+                <th>Interest Repaid</th>
+                <th>Closing Principal</th>
               </tr>
             </thead>
             <tbody id="amortization-table-body">
@@ -377,18 +738,21 @@
     <section id="tab-ai-tips" class="tab-panel" aria-labelledby="tab-ai-heading">
       <div class="page-intro">
         <h1 id="tab-ai-heading">AI Financial Coaching</h1>
-        <p>Receive constructive insights powered by the Anthropic Claude API, designed to help improve your creditworthiness and manage debt leverage.</p>
+        <p>Contextual financial literacy coaching powered by Anthropic Claude API, with transparent fallback to deterministic rules if offline.</p>
       </div>
 
-      <div class="card" style="text-align: center; padding: 32px 24px;">
-        <div style="font-size: 2.5rem; margin-bottom: 12px;">🧠</div>
-        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Personalized Educational Analysis</h2>
-        <p style="max-width: 600px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--color-text-muted);">
-          Our AI analyzes your calculated FOIR, DTI ratio, and credit profile to highlight key strengths, warning flags, and personalized steps to improve your profile.
+      <div class="card" style="text-align: center; padding: 36px 24px;">
+        <div style="width: 52px; height: 52px; border-radius: var(--radius-lg); background: #f5f3ff; color: #7c3aed; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px;">Personalized Debt Coaching</h2>
+        <p style="max-width: 620px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--color-text-muted); line-height: 1.6;">
+          Our AI reads your calculated FOIR, DTI ratio, and credit tier to highlight debt management strengths, identify vulnerabilities, and provide actionable tips.
         </p>
 
-        <button id="btn-fetch-ai-tips" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem;">
-          ✨ Generate AI Financial Tips
+        <button id="btn-fetch-ai-tips" class="btn btn-primary" style="padding: 12px 28px; font-size: 0.98rem;">
+          <span>Generate AI Financial Coaching</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
         </button>
       </div>
 
@@ -403,13 +767,16 @@
     <section id="tab-sheets" class="tab-panel" aria-labelledby="tab-sheets-heading">
       <div class="page-intro">
         <h1 id="tab-sheets-heading">Google Sheets Data Logging</h1>
-        <p>Store submitted assessment records securely into an educational Google Sheet via Google Apps Script Webhook.</p>
+        <p>Persist student evaluation records to a centralized Google Sheet via Google Apps Script Webhook.</p>
       </div>
 
       <div class="grid-2col">
         <!-- Submission Form Card -->
         <div class="card">
-          <h2 class="card-title">Record Assessment</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Record Assessment</span>
+          </h2>
           <div id="sheets-assessment-summary">
             <!-- Populated dynamically by sheetsSubmission.js -->
           </div>
@@ -425,15 +792,19 @@
               <input type="email" id="applicant-email" class="form-control" placeholder="alex@example.com">
             </div>
 
-            <button type="submit" class="btn btn-success btn-block">
-              📊 Submit to Google Sheet
+            <button type="submit" class="btn btn-success btn-block" style="padding: 12px;">
+              <span>Submit to Google Sheet</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </form>
         </div>
 
         <!-- Session History Card -->
         <div class="card">
-          <h2 class="card-title">Recent Submissions (Session Log)</h2>
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Recent Submissions (Session Log)</span>
+          </h2>
           <div id="assessment-history-list">
             <div style="font-size: 0.85rem; color: var(--color-text-muted); text-align: center; padding: 24px 0;">
               No records submitted yet in this session.
@@ -451,15 +822,37 @@
   <!-- Application Footer -->
   <footer class="app-footer">
     <div class="footer-container">
-      <div style="font-weight: 700; color: #f8fafc; font-size: 1rem;">
-        AI Loan Eligibility Checker • Academic Project
+      <div class="footer-brand">
+        <div class="footer-title">AI Loan Eligibility Checker</div>
+        <p class="footer-disclaimer">
+          <strong>Academic Disclaimer:</strong> This application is developed strictly for educational demonstration and student project evaluation. It utilizes heuristic financial formulas to simulate credit evaluation and does not constitute real-world banking decisions, official loan approvals, or certified financial counseling.
+        </p>
       </div>
-      <p class="footer-disclaimer">
-        <strong>Academic Disclaimer:</strong> This application is developed strictly for educational demonstration and student project evaluation. It utilizes heuristic financial formulas to simulate credit evaluation and does not constitute real-world banking decisions, official loan approvals, or legal financial counseling.
-      </p>
-      <div style="font-size: 0.78rem; color: #64748b;">
-        Vanilla HTML5/CSS3/JavaScript Frontend • Node.js Express Backend • Anthropic Claude API Integration
+
+      <div class="footer-links-col">
+        <h4>Assessment Tools</h4>
+        <ul>
+          <li><a href="#loan" onclick="window.switchToTab('tab-loan-checker'); return false;">Loan Eligibility Checker</a></li>
+          <li><a href="#credit" onclick="window.switchToTab('tab-credit-analyzer'); return false;">Credit Score Analyzer</a></li>
+          <li><a href="#emi" onclick="window.switchToTab('tab-emi-calc'); return false;">EMI & Amortization</a></li>
+          <li><a href="#ai" onclick="window.switchToTab('tab-ai-tips'); return false;">AI Financial Coaching</a></li>
+        </ul>
       </div>
+
+      <div class="footer-links-col">
+        <h4>Architecture</h4>
+        <ul>
+          <li><a href="#home" onclick="window.switchToTab('tab-home'); return false;">Deterministic Formulas</a></li>
+          <li><a href="#sheets" onclick="window.switchToTab('tab-sheets'); return false;">Google Sheets Sync</a></li>
+          <li><a href="#ai" onclick="window.switchToTab('tab-ai-tips'); return false;">Claude AI Fallback Engine</a></li>
+          <li><a href="https://github.com/AviCodes03/ai-loan-eligibility-checker" target="_blank" rel="noopener">GitHub Repository</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>Vanilla HTML5/CSS3/JavaScript Frontend • Node.js Express Backend • Anthropic Claude SDK</div>
+      <div>&copy; 2026 AI Loan Eligibility Checker Team • MIT License</div>
     </div>
   </footer>
 

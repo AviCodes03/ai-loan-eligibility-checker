@@ -87,3 +87,46 @@ test('Validator - Credit Score Bounds', () => {
   validateCreditAnalysis(invalidMock.req, invalidMock.res, invalidMock.next);
   assert.strictEqual(invalidMock.getResult().statusCode, 400);
 });
+
+test('Validator - Applicant Age Bounds in Loan Check', () => {
+  // Valid age within 18 to 100
+  const validMock = createMockReqRes({
+    monthlyIncome: 70000,
+    existingEmi: 10000,
+    requestedLoanAmount: 400000,
+    tenureMonths: 36,
+    interestRate: 8.5,
+    creditScore: 720,
+    age: 28
+  });
+  validateLoanCheck(validMock.req, validMock.res, validMock.next);
+  assert.strictEqual(validMock.getResult().nextCalled, true);
+  assert.strictEqual(validMock.req.body.age, 28);
+
+  // Invalid underage (< 18)
+  const underageMock = createMockReqRes({
+    monthlyIncome: 70000,
+    existingEmi: 10000,
+    requestedLoanAmount: 400000,
+    tenureMonths: 36,
+    interestRate: 8.5,
+    creditScore: 720,
+    age: 16
+  });
+  validateLoanCheck(underageMock.req, underageMock.res, underageMock.next);
+  assert.strictEqual(underageMock.getResult().statusCode, 400);
+  assert.ok(underageMock.getResult().jsonResponse.details.some(d => d.toLowerCase().includes('age')));
+
+  // Invalid over-max (> 100)
+  const overageMock = createMockReqRes({
+    monthlyIncome: 70000,
+    existingEmi: 10000,
+    requestedLoanAmount: 400000,
+    tenureMonths: 36,
+    interestRate: 8.5,
+    creditScore: 720,
+    age: 110
+  });
+  validateLoanCheck(overageMock.req, overageMock.res, overageMock.next);
+  assert.strictEqual(overageMock.getResult().statusCode, 400);
+});

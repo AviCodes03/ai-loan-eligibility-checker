@@ -7,13 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryBox = document.getElementById('sheets-assessment-summary');
   const historyList = document.getElementById('assessment-history-list');
 
+  const STORAGE_KEY = 'ai_loan_assessment_history';
+
   // Load and refresh summary when tab is viewed
   function refreshSummary() {
     if (!summaryBox) return;
     const a = window.latestAssessment;
     if (!a) {
       summaryBox.innerHTML = `
-        <div style="padding: 16px; background: #f8fafc; border: 1px dashed var(--color-border); border-radius: var(--radius-md); text-align: center; color: var(--color-text-muted); font-size: 0.88rem;">
+        <div style="padding: 16px; background: var(--color-bg-subtle); border: 1px dashed var(--color-border); border-radius: var(--radius-md); text-align: center; color: var(--color-text-muted); font-size: 0.88rem;">
           No assessment calculated yet. Please run the <a href="#" onclick="window.switchToTab('tab-loan-checker'); return false;">Loan Eligibility Checker</a> first.
         </div>
       `;
@@ -37,6 +39,86 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.refreshSheetsSummary = refreshSummary;
+
+  // Retrieve stored assessment records from local storage
+  function getLocalHistory() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  // Save record to local storage
+  function saveToLocalHistory(item) {
+    try {
+      const list = getLocalHistory();
+      list.unshift(item);
+      if (list.length > 50) list.pop();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch (err) {
+      console.warn('Could not save to localStorage:', err);
+    }
+  }
+
+  // Render a list of assessment records
+  function renderHistoryList(records) {
+    if (!historyList) return;
+    if (!records || records.length === 0) {
+      historyList.innerHTML = `
+        <div style="font-size: 0.85rem; color: var(--color-text-muted); text-align: center; padding: 24px 0;">
+          No records submitted yet in this session.
+        </div>
+      `;
+      return;
+    }
+
+    historyList.innerHTML = records.map((rec) => {
+      const dateStr = rec.timestamp ? new Date(rec.timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
+      const isEligible = rec.status === 'Eligible';
+      const isCond = rec.status === 'Conditionally Eligible';
+      const statusColor = isEligible ? 'var(--color-success)' : (isCond ? 'var(--color-warning)' : 'var(--color-danger)');
+      const amountStr = window.APP_CONFIG.formatINR(rec.requestedLoanAmount || 0);
+
+      return `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--color-bg-muted); border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; transition: transform 0.15s ease;">
+          <div>
+            <strong>${rec.applicantName || 'Anonymous Applicant'}</strong> — ${amountStr} requested
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">
+              ${dateStr} • Credit Score: ${rec.creditScore || 'N/A'} • ${rec.note || 'Recorded Assessment'}
+            </div>
+          </div>
+          <span style="font-weight: 700; color: ${statusColor}; font-size: 0.85rem; text-align: right;">
+            ${rec.status || 'Evaluated'}
+          </span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Dynamically load history from backend API and/or localStorage
+  async function loadAndRenderHistory() {
+    let records = [];
+
+    // Attempt retrieval from backend GET /api/assessment/history
+    try {
+      const res = await window.apiClient.get('assessment/history');
+      if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+        records = res.data;
+      }
+    } catch {
+      // Fallback to local storage if server endpoint unavailable
+    }
+
+    if (records.length === 0) {
+      records = getLocalHistory();
+    }
+
+    renderHistoryList(records);
+  }
+
+  window.loadAssessmentHistory = loadAndRenderHistory;
 
   if (form) {
     form.addEventListener('submit', async (e) => {
@@ -69,17 +151,32 @@ document.addEventListener('DOMContentLoaded', () => {
           assessmentData: assessment
         });
 
-        if (response.success) {
+        const isSynced = response.success;
+        const note = isSynced ? 'Synced to Sheet' : 'Local Session Only';
+
+        saveToLocalHistory({
+          applicantName,
+          applicantEmail,
+          requestedLoanAmount: assessment.input.requestedLoanAmount,
+          monthlyIncome: assessment.input.monthlyIncome,
+          creditScore: assessment.input.creditScore,
+          status: assessment.status,
+          riskTier: assessment.riskTier,
+          timestamp: new Date().toISOString(),
+          note
+        });
+
+        loadAndRenderHistory();
+
+        if (isSynced) {
           window.appToast('Assessment successfully recorded to Google Sheets!', 'success');
-          addHistoryRecord(applicantName, assessment);
-          form.reset();
         } else {
-          window.appToast(response.error || 'Notice: Google Sheets persistence is currently unconfigured.', 'info');
-          // Still record in local session history
-          addHistoryRecord(applicantName, assessment, 'Local Session Only');
+          window.appToast(response.error || 'Saved to local assessment history (Google Sheets is unconfigured).', 'info');
         }
+
+        form.reset();
       } catch (err) {
-        window.appToast(err.message || 'Failed to submit assessment to Google Sheets.', 'error');
+        window.appToast(err.message || 'Failed to submit assessment.', 'error');
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
@@ -87,19 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function addHistoryRecord(name, assessment, note = 'Synced to Sheet') {
-    if (!historyList) return;
-    const row = document.createElement('div');
-    row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #fff; border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem;';
-    row.innerHTML = `
-      <div>
-        <strong>${name}</strong> — ${window.APP_CONFIG.formatINR(assessment.input.requestedLoanAmount)} requested
-        <div style="font-size: 0.75rem; color: var(--color-text-muted);">${new Date().toLocaleTimeString()} • ${note}</div>
-      </div>
-      <span style="font-weight: 700; color: ${assessment.isEligible ? 'var(--color-success)' : 'var(--color-danger)'};">
-        ${assessment.status}
-      </span>
-    `;
-    historyList.prepend(row);
-  }
+  // Initial load of stored records
+  loadAndRenderHistory();
 });

@@ -41,5 +41,13 @@ module.exports = {
     MAX_LOAN_AMOUNT: 100000000,   // Max ₹10 Crore (₹100,000,000)
     MIN_INTEREST_RATE: 0.1,
     MAX_INTEREST_RATE: 50.0
+  },
+
+  // Applicant Age Guidelines (Standard retail banking demo criteria: 21 - 65 years)
+  AGE_BOUNDS: {
+    MIN_AGE: 18,
+    MIN_BORROWER_AGE: 21,
+    MAX_RETIREMENT_AGE: 65,
+    MAX_AGE: 100
   }
 };

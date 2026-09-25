@@ -4,6 +4,18 @@
  * Maintains zero credential exposure and graceful offline/error handling.
  */
 
+// In-memory dynamic assessment history cache (most recent 50 submissions)
+const assessmentHistory = [];
+const MAX_HISTORY = 50;
+
+function getAssessmentHistory() {
+  return [...assessmentHistory];
+}
+
+function clearAssessmentHistory() {
+  assessmentHistory.length = 0;
+}
+
 /**
  * Formats assessment record into tabular columns for Google Sheets
  *
@@ -45,6 +57,15 @@ async function submitToSheets(data = {}, customFetch = null) {
     { name: data.applicantName, email: data.applicantEmail },
     data.assessmentData
   );
+
+  // Dynamically record in server memory history log
+  assessmentHistory.unshift({
+    id: `rec_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    ...rowData
+  });
+  if (assessmentHistory.length > MAX_HISTORY) {
+    assessmentHistory.pop();
+  }
 
   // 1. Unconfigured Webhook Handling
   if (!webhookUrl || webhookUrl.trim().length === 0) {
@@ -112,5 +133,7 @@ async function submitToSheets(data = {}, customFetch = null) {
 
 module.exports = {
   submitToSheets,
-  formatAssessmentRow
+  formatAssessmentRow,
+  getAssessmentHistory,
+  clearAssessmentHistory
 };

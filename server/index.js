@@ -15,6 +15,15 @@ const { requestLogger } = require('./middleware/logger');
 const { errorHandler, notFoundHandler, jsonSyntaxErrorHandler } = require('./middleware/errorHandler');
 const apiRoutes = require('./routes/apiRoutes');
 
+// Handle unexpected process errors
+process.on('uncaughtException', (err) => {
+  console.error('[Process Uncaught Exception]:', err);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[Process Unhandled Rejection]:', reason);
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -78,8 +87,8 @@ app.get('*', (req, res, next) => {
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// 10. Start HTTP Server (when not running inside test runner)
-if (process.env.NODE_ENV !== 'test') {
+// 10. Start HTTP Server (when executed directly, not when imported in test runner)
+if (process.env.NODE_ENV !== 'test' && require.main === module) {
   app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`🚀 AI Loan Eligibility Checker Server running on:`);
